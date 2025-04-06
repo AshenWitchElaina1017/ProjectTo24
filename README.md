@@ -6,14 +6,14 @@
 
 *   **首页 (`/`)**: 项目的入口页面。
 *   **节气翻牌游戏 (`/game`)**: 一个简单的记忆匹配游戏，使用二十四节气的图片。
-*   **AI 问答 (`/qa`)**: 用户可以就二十四节气相关问题提问，后端通过调用外部 AI 服务（支持 Ephone Chat 和 DeepSeek）来提供答案。
+*   **AI 问答 (`/qa`)**: 用户可以就二十四节气相关问题提问，后端通过调用外部 AI 服务（支持 ChatGPT 和 DeepSeek）来提供答案。
 *   **节气歌曲 (`/song`)**: 可能包含与二十四节气相关的歌曲或音乐信息。
 
 ## 创新点
 
 *   **文化与科技融合**: 将中国传统文化精髓（二十四节气）与现代 Web 技术（Flask）及人工智能（多模型 AI 问答）相结合。
 *   **互动式学习**: 通过翻牌游戏等互动元素，提升用户对节气知识的学习兴趣和记忆效果。
-*   **多 AI 模型集成**: 集成了 Ephone Chat 和 DeepSeek 两个 AI 模型，为用户提供多样化的信息来源和问答体验。
+*   **多 AI 模型集成**: 集成了 ChatGPT 和 DeepSeek 两个 AI 模型，为用户提供多样化的信息来源和问答体验。
 *   **深度内容生成**: 利用精心设计的系统提示（System Prompt），引导 AI 生成结构化、深入、准确的节气知识体系。
 
 ## 应用点
@@ -57,7 +57,7 @@
     *   复制 `.env.example` (如果存在) 或手动创建一个名为 `.env` 的文件。
     *   在 `.env` 文件中添加您的 API 密钥：
         ```dotenv
-        EPHONE_CHAT_API_KEY=your_chatgpt_api_key_here
+        CHATGPT_API_KEY=your_chatgpt_api_key_here
         DEEPSEEK_API_KEY=your_deepseek_api_key_here
         ```
     *   **注意**: 如果没有提供相应的 API 密钥，对应的 AI 问答功能将无法使用。

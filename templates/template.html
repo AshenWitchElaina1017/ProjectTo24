@@ -17,6 +17,11 @@
             <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="节气小筑 Logo"></a>
         </div>
         <div class="navbar-slogan">传统文化之二十四节气</div>
+        <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <ul class="nav-links">
             <li><a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' else '' }}">首页</a></li>
             <li><a href="{{ url_for('game') }}" class="{{ 'active' if request.endpoint == 'game' else '' }}">记忆匹配</a></li>

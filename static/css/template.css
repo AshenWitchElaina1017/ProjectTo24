@@ -37,6 +37,7 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px; /* 与下方内容隔开距离 */
+    position: relative; /* Add relative positioning context for absolute children */
 }
 
 .navbar .logo a {
@@ -118,6 +119,90 @@ body {
     color: #66a6ff; /* 文字颜色变为主题蓝色 */
     transform: translateY(-4px) scale(1.05); /* 增加上移和放大效果 */
     box-shadow: 0 6px 12px rgba(102, 166, 255, 0.25); /* 增强悬停/激活阴影 */
+}
+/* Hamburger Menu Button */
+.menu-toggle {
+    display: block; /* Show button on mobile */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 15px; /* Add some space from the logo */
+    z-index: 1050; /* Ensure it's above other nav elements if needed */
+    order: 2; /* Position after logo, before slogan wrap */
+}
+
+.menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #ffffff; /* White lines */
+    margin: 5px 0;
+    transition: all 0.3s ease-in-out;
+    border-radius: 2px;
+}
+
+/* Hamburger to "X" transition */
+.menu-toggle.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+
+/* Adjust Nav Links for Mobile Menu */
+.navbar .nav-links {
+    /* display: none; is already set in responsive section */
+    position: absolute; /* Take out of flow for overlay */
+    top: 100%; /* Position below the navbar */
+    left: 0;
+    width: 100%;
+    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); /* Match navbar background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.3); /* Separator line */
+    display: none; /* Keep hidden by default */
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1040; /* Ensure it's above content, slightly below menu toggle */
+}
+
+.navbar .nav-links.nav-active {
+    display: flex; /* Show when active */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.navbar .nav-links li {
+    width: 100%;
+    text-align: center;
+}
+
+.navbar .nav-links li a {
+    display: block; /* Make link take full width */
+    padding: 12px 20px;
+    margin: 5px 15px; /* Add vertical spacing and horizontal margin */
+    border-radius: 8px; /* Less rounded for list items */
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly different background */
+    width: auto; /* Let text determine width within margins */
+    color: #ffffff;
+}
+
+.navbar .nav-links li a:hover,
+.navbar .nav-links li a.active {
+    background-color: #ffffff;
+    color: #66a6ff;
+    transform: none; /* Disable hover transform in mobile menu */
+    box-shadow: none; /* Disable hover shadow in mobile menu */
 }
 
 /* 内容区域 */
@@ -226,3 +311,193 @@ body {
     /* Padding will be handled by the iframe content or qa.css */
 }
 
+/* Responsive Design - Media Queries */
+
+/* Default styles are mobile-first */
+
+/* Adjust navbar for smaller screens */
+.navbar {
+    padding: 15px 20px; /* Reduce padding */
+    flex-wrap: wrap; /* Allow items to wrap */
+    justify-content: space-between; /* Ensure logo and potential menu button are spaced */
+    margin-bottom: 20px;
+}
+
+.navbar .logo {
+    flex-basis: auto; /* Allow logo to take natural width */
+}
+
+.navbar .navbar-slogan {
+    font-size: 1.8em; /* Smaller font size for mobile */
+    order: 3; /* Move slogan below logo and links/button on wrap */
+    flex-basis: 100%; /* Take full width when wrapped */
+    text-align: center;
+    margin-top: 10px; /* Add space when wrapped */
+    text-shadow: /* Simplified shadow for mobile */
+        0 0 3px #540a54,
+        0 0 6px #676ef8,
+        0 0 10px #a071f7;
+}
+
+.navbar .nav-links {
+    display: none; /* Hide nav links by default on mobile */
+    /* Future: Will be shown via hamburger menu toggle */
+    order: 2; /* Position links/button after logo */
+}
+
+/* Adjust container padding for mobile */
+.container {
+    padding: 0 15px;
+}
+
+/* Adjust content padding for mobile */
+.content {
+    padding: 20px;
+}
+
+/* Adjust AI chat window size for mobile */
+#ai-chat-window {
+    width: 90%;
+    max-width: 320px; /* Limit max width on mobile */
+    right: 15px;
+    bottom: 75px;
+    height: 450px;
+}
+
+#ai-assistant-button {
+    right: 15px;
+    bottom: 20px;
+    padding: 10px 15px;
+}
+
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .navbar {
+        padding: 20px 30px; /* Restore some padding */
+        flex-wrap: nowrap; /* Prevent wrapping */
+        margin-bottom: 25px;
+    }
+
+    .navbar .navbar-slogan {
+        font-size: 2.5em; /* Increase font size */
+        order: 0; /* Reset order */
+        flex-basis: auto; /* Reset basis */
+        margin-top: 0; /* Reset margin */
+        text-align: center; /* Keep centered */
+        flex-grow: 1; /* Allow it to grow again */
+         text-shadow: /* Restore some complexity */
+            0 0 4px #540a54,
+            0 0 8px #676ef8,
+            0 0 15px #a071f7,
+            0 0 20px #00ffff;
+    }
+
+    .navbar .nav-links {
+        display: flex; /* Show nav links */
+        order: 0; /* Reset order */
+    }
+
+    /* Hide hamburger menu button on larger screens */
+    .navbar .menu-toggle { display: none; }
+
+    /* Restore desktop nav-links styles */
+    .navbar .nav-links {
+        position: static;
+        display: flex;
+        flex-direction: row;
+        width: auto;
+        background: none;
+        box-shadow: none;
+        padding: 0;
+        border-top: none;
+        opacity: 1; /* Ensure visible */
+        transform: none; /* Reset transform */
+    }
+
+     .navbar .nav-links li {
+        width: auto; /* Reset width */
+        text-align: left; /* Reset alignment */
+    }
+
+    .navbar .nav-links li a {
+        display: inline-block; /* Restore inline block */
+        padding: 10px 18px; /* Restore desktop padding */
+        margin: 0; /* Reset margin */
+        border-radius: 50px; /* Restore pill shape */
+        background-color: rgba(255, 255, 255, 0.4); /* Restore desktop background */
+        width: auto; /* Restore auto width */
+    }
+
+     .navbar .nav-links li a:hover,
+    .navbar .nav-links li a.active {
+        background-color: #ffffff;
+        color: #66a6ff;
+        transform: translateY(-4px) scale(1.05); /* Restore hover transform */
+        box-shadow: 0 6px 12px rgba(102, 166, 255, 0.25); /* Restore hover shadow */
+    }
+
+
+    .container {
+        padding: 0 20px;
+    }
+
+    .content {
+        padding: 25px;
+    }
+
+    #ai-chat-window {
+        width: 350px;
+        right: 20px;
+        bottom: 80px;
+        height: 500px;
+    }
+
+     #ai-assistant-button {
+        right: 20px;
+        bottom: 25px;
+         padding: 12px 20px;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .navbar {
+        padding: 20px 40px; /* Full padding */
+         margin-bottom: 30px;
+    }
+
+    .navbar .navbar-slogan {
+        font-size: 3em; /* Full font size */
+         text-shadow: /* Full shadow effect */
+            0 0 5px #540a54,
+            0 0 10px #676ef8,
+            0 0 20px #a071f7,
+            0 0 30px #00ffff,
+            0 0 40px #00ffff,
+            0 0 55px #00ffff,
+            0 0 70px #ffffff;
+    }
+
+    .content {
+        padding: 30px;
+    }
+
+     #ai-chat-window {
+        right: 30px;
+        bottom: 90px;
+    }
+
+     #ai-assistant-button {
+        right: 30px;
+        bottom: 30px;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    /* Optional: Add specific styles for very large screens if needed */
+    .container {
+        max-width: 1200px; /* Ensure container doesn't get too wide */
+    }
+}
