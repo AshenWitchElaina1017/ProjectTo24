@@ -1,0 +1,59 @@
+{% extends "template.html" %}
+
+{% block title %}
+二十四节气 - 智能问答
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/qa.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    {# 聊天窗口顶部标题 #}
+    <div class="chat-header">
+        <h4>节气小助手 💬</h4>
+        <button id="clear-chat-button" class="qa-button clear-button" title="清空消息记录">🗑️ 清空</button>
+    </div>
+
+    {# 聊天记录显示区域 #}
+    <div id="chat-log" class="chat-log">
+        {# 初始 AI 消息会由 JS 添加 #}
+    </div>
+
+    {# AI 代理选择器 #}
+    <div class="agent-selector">
+        <label for="ai-agent-select">选择AI助手:</label>
+        <select id="ai-agent-select" name="ai_agent">
+            <option value="default" selected>ChatGPT 助手 (默认)</option>
+            <option value="deepseek">DeepSeek 助手</option>
+        </select>
+    </div>
+
+    {# 输入区域和表单 #}
+    <form id="qa-form" class="chat-form">
+        <textarea id="user-question" name="question" rows="1" placeholder="问点关于二十四节气的事吧..." required></textarea>
+        <button type="submit" id="submit-button" class="qa-button">
+            <span class="button-text">发送</span>
+            <span class="loading-icon" style="display: none;"></span> {# Loading 动画容器 #}
+        </button>
+    </form>
+
+    {# 问题提示词区域 #}
+    <div class="prompt-suggestions">
+        <span>试试问：</span>
+        <button type="button" class="prompt-chip">立春有什么习俗？</button>
+        <button type="button" class="prompt-chip">夏至吃什么？</button>
+        <button type="button" class="prompt-chip">介绍一下“白露”</button>
+        <button type="button" class="prompt-chip">秋分的气候特点</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {# +++ 引入 marked 和 DOMPurify +++ #}
+    <script src="{{ url_for('static', filename='js/marked.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
+    {# +++++++++++++++++++++++++++++++ #}
+    <script src="{{ url_for('static', filename='js/qa.js') }}"></script>
+{% endblock %}

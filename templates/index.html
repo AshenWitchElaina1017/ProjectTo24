@@ -1,0 +1,37 @@
+{% extends "template.html" %}
+{% block title %}
+二十四节气 - 首页
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+{% block content %}
+{# 1. 上部分：轮播图 #}
+<div class="carousel-container">
+    <div class="carousel-slide">
+    </div>
+    <button class="carousel-control prev" id="carousel-prev">&lt;</button>
+    <button class="carousel-control next" id="carousel-next">&gt;</button>
+    <div class="carousel-dots">
+    </div>
+</div>
+{# 2. 下部分：季节与节气介绍 #}
+<div class="seasons-container">
+    <h2>探索四季之韵</h2>
+    <div class="season-tabs">
+        <button class="season-btn active" data-season="Spring">春</button>
+        <button class="season-btn" data-season="Summer">夏</button>
+        <button class="season-btn" data-season="Autumn">秋</button>
+        <button class="season-btn" data-season="Winter">冬</button>
+    </div>
+    <div class="terms-display">
+        <p>请选择一个季节查看对应的节气。</p>
+    </div>
+    <div id="term-details" class="term-details-container">
+        <p>点击上面的节气查看详细介绍。</p>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

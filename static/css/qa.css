@@ -1,0 +1,262 @@
+/* --- Chat Container Styles --- */
+.chat-container {
+    max-width: 800px;
+    margin: 30px auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+    min-height: 400px;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    overflow: hidden;
+}
+
+/* --- Chat Header Styles --- */
+.chat-header {
+    padding: 10px 20px;
+    /* text-align: center; Removed for flex alignment */
+    border-bottom: 1px solid #e8e8e8;
+    background-color: #fdfdfd;
+    color: #2c5d87;
+    font-weight: bold;
+    flex-shrink: 0;
+    /* Add flexbox for layout */
+    display: flex;
+    justify-content: space-between; /* Push title and button apart */
+    align-items: center; /* Vertically align items */
+}
+.chat-header h4 { margin: 0; font-size: 1.1em; }
+
+/* --- Chat Log Area Styles --- */
+.chat-log {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto; /* 聊天记录的滚动条在这里 */
+    background-color: #f7f9fc;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* --- General Message Bubble Styles --- */
+.message {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 75%;
+    line-height: 1.6; /* 增加行高以便阅读 */
+    word-wrap: break-word;
+    position: relative;
+    /* 基础字体大小，Markdown 元素可以相对调整 */
+    font-size: 0.95em;
+}
+
+/* --- AI Message Bubble Styles --- */
+.ai-message {
+    background-color: #e9eaf0;
+    color: #333;
+    border-bottom-left-radius: 5px;
+    align-self: flex-start;
+    margin-right: auto;
+}
+.ai-message.thinking { font-style: italic; color: #666; }
+.ai-message.error-message { background-color: #f8d7da; color: #721c24; font-weight: bold; }
+
+/* --- User Message Bubble Styles --- */
+.user-message {
+    background-color: #dcf8c6;
+    color: #333;
+    border-bottom-right-radius: 5px;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+/* +++ Markdown Element Styles within Messages +++ */
+.message p {
+    margin-top: 0; /* 第一个段落无上边距 */
+    margin-bottom: 0.8em; /* 段落间距 */
+}
+.message p:last-child {
+    margin-bottom: 0; /* 最后一个段落无下边距 */
+}
+.message ul, .message ol {
+    padding-left: 25px; /* 列表缩进 */
+    margin-bottom: 0.8em;
+}
+.message li {
+    margin-bottom: 0.3em; /* 列表项间距 */
+}
+.message strong, .message b {
+    font-weight: bold; /* 粗体 */
+}
+.message em, .message i {
+    font-style: italic; /* 斜体 */
+}
+.message code { /* 行内代码 */
+    background-color: rgba(0, 0, 0, 0.06);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+}
+.message pre { /* 代码块 */
+    background-color: #2d2d2d; /* 深色背景 */
+    color: #f1f1f1; /* 浅色文字 */
+    padding: 15px;
+    border-radius: 6px;
+    overflow-x: auto; /* 代码块横向滚动 */
+    margin: 1em 0;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    line-height: 1.4;
+    position: relative; /* Needed for absolute positioning of the button container */
+}
+.message pre code { /* 代码块内的 code 标签无特殊样式 */
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit; /* 继承 pre 的字体大小 */
+    color: inherit; /* 继承 pre 的颜色 */
+}
+.message blockquote {
+    border-left: 4px solid #ccc;
+    margin-left: 0;
+    padding-left: 1em;
+    color: #666;
+    font-style: italic;
+}
+.message h1, .message h2, .message h3, .message h4, .message h5, .message h6 {
+    margin-top: 1.2em;
+    margin-bottom: 0.6em;
+    font-weight: bold;
+    line-height: 1.3;
+}
+.message h1 { font-size: 1.6em; }
+.message h2 { font-size: 1.4em; }
+.message h3 { font-size: 1.2em; }
+/* ... 可根据需要添加 h4-h6 样式 ... */
+/* ++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
+/* --- Chat Input Form Styles --- */
+.chat-form {
+    display: flex;
+    padding: 12px 20px;
+    border-top: 1px solid #e8e8e8;
+    background-color: #ffffff;
+    gap: 10px;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+#user-question {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1em;
+    resize: none; /* 禁止手动调整大小 */
+    min-height: 20px;
+    max-height: 100px; /* 限制最大高度 */
+    overflow-y: auto; /* 内容超出时显示滚动条 (包括上下箭头) */
+    box-sizing: border-box;
+    font-family: inherit;
+    line-height: 1.4;
+}
+#user-question:focus { border-color: #3a7bd5; outline: none; box-shadow: 0 0 5px rgba(58, 123, 213, 0.3); }
+
+/* Submit Button Styles */
+.qa-button {
+    padding: 8px 15px; background-color: #3a7bd5; color: white; border: none; border-radius: 20px;
+    font-size: 1em; cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease;
+    display: inline-flex; align-items: center; justify-content: center; height: 40px;
+    align-self: flex-end; flex-shrink: 0;
+}
+.qa-button:hover { background-color: #2a5a9a; }
+.qa-button:active { transform: scale(0.98); }
+.qa-button:disabled { background-color: #a0b3c7; cursor: not-allowed; }
+
+/* Loading Icon Styles */
+.loading-icon {
+    border: 3px solid rgba(255, 255, 255, 0.3); border-radius: 50%; border-top-color: #ffffff;
+    width: 16px; height: 16px; animation: spin 1s linear infinite; margin-left: 8px; display: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* --- Prompt Suggestions Styles --- */
+.prompt-suggestions {
+    padding: 10px 20px; background-color: #f7f9fc; border-top: 1px solid #e8e8e8;
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    font-size: 0.9em; color: #555; flex-shrink: 0;
+}
+.prompt-suggestions span { margin-right: 5px; font-weight: 500; color: #333; }
+.prompt-chip {
+    background-color: #ffffff; border: 1px solid #d1d3d8; border-radius: 15px; padding: 4px 12px;
+    font-size: 0.85em; cursor: pointer; transition: all 0.2s ease; color: #3a7bd5;
+    appearance: none; text-align: center;
+}
+.prompt-chip:hover { background-color: #eef4ff; border-color: #a8c7fa; color: #2a5a9a; }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 600px) {
+    .chat-container { margin: 0; height: 100vh; border-radius: 0; box-shadow: none; }
+    .chat-header, .chat-form, .prompt-suggestions { padding-left: 15px; padding-right: 15px; }
+    .message { max-width: 90%; font-size: 0.9em; } /* 移动端消息可稍宽，字体稍小 */
+    .prompt-suggestions { padding-bottom: 15px; }
+}
+
+/* --- Code Block Copy Button Styles --- */
+.code-button-container {
+    position: absolute;
+    top: 5px; /* Adjust as needed */
+    right: 5px; /* Adjust as needed */
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.2s ease-in-out;
+}
+
+.message pre:hover .code-button-container {
+    opacity: 1; /* Show on hover */
+}
+
+.copy-code-button {
+    background-color: #555; /* Button background */
+    color: #f1f1f1; /* Button text color */
+    border: none;
+    padding: 4px 8px;
+    font-size: 0.8em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.copy-code-button:hover {
+    background-color: #777; /* Darker on hover */
+}
+
+.copy-code-button:disabled {
+    background-color: #4caf50; /* Green when copied */
+    color: white;
+    cursor: default;
+}
+
+/* --- Clear Button Specific Styles --- */
+.clear-button {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text */
+    padding: 5px 10px; /* Smaller padding */
+    font-size: 0.85em; /* Smaller font size */
+    height: auto; /* Adjust height */
+    border-radius: 5px; /* Less rounded corners */
+    border: 1px solid #f5c6cb; /* Light red border */
+}
+
+.clear-button:hover {
+    background-color: #f5c6cb; /* Darker red on hover */
+    border-color: #f1b0b7;
+    color: #721c24; /* Keep text color on hover */
+}
+
+.clear-button:active {
+    transform: scale(0.97); /* Slightly different active scale */
+}

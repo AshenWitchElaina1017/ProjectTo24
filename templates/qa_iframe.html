@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <title>AI 助手</title> {# Simplified title for iframe #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}"> {# Keep base styles #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/qa.css') }}">
+    <style>
+        /* Add specific styles for iframe context if needed */
+        body {
+            background-color: #ffffff; /* Ensure white background */
+            min-height: auto; /* Override min-height from template.css */
+            padding: 0; /* Remove potential body padding */
+            display: flex; /* Use flex to make chat container fill height */
+            flex-direction: column;
+            height: 100vh; /* Make body fill iframe height */
+        }
+        .chat-container {
+           /* Override styles from qa.css if they cause issues in iframe */
+           border: none; /* Remove border if it exists */
+           box-shadow: none; /* Remove shadow if it exists */
+           margin: 0; /* Remove margin */
+           border-radius: 0; /* Remove border-radius */
+           padding: 10px; /* Add some padding inside the iframe */
+           flex-grow: 1; /* Allow container to grow */
+           display: flex;
+           flex-direction: column;
+           height: 100%; /* Make container fill body */
+        }
+        .chat-log {
+            flex-grow: 1; /* Ensure chat log takes available space */
+            height: auto; /* Override fixed height if any */
+        }
+        /* Hide elements not needed in the iframe version */
+        .chat-header h4 { /* Maybe hide the title if header in parent is enough */
+           display: none;
+        }
+         /* Adjust prompt suggestions for smaller space */
+        .prompt-suggestions {
+            padding: 8px 0;
+            flex-wrap: wrap; /* Allow chips to wrap */
+            justify-content: flex-start; /* Align chips to start */
+        }
+        .prompt-chip {
+            margin: 3px;
+            padding: 4px 8px;
+            font-size: 0.85em;
+        }
+        /* Ensure form elements fit well */
+        .chat-form {
+            padding: 8px 0;
+        }
+        .agent-selector {
+            padding: 5px 0;
+            font-size: 0.9em;
+        }
+        #ai-agent-select {
+            padding: 3px;
+        }
+    </style>
+</head>
+<body>
+    {# Copied content from templates/qa.html's content block #}
+    <div class="chat-container">
+        {# 聊天窗口顶部标题 #}
+        <div class="chat-header">
+            <h4>节气小助手 💬</h4>
+            <button id="clear-chat-button" class="qa-button clear-button" title="清空消息记录">🗑️ 清空</button>
+        </div>
+
+        {# 聊天记录显示区域 #}
+        <div id="chat-log" class="chat-log">
+            {# 初始 AI 消息会由 JS 添加 #}
+        </div>
+
+        {# AI 代理选择器 #}
+        <div class="agent-selector">
+            <label for="ai-agent-select">选择AI助手:</label>
+            <select id="ai-agent-select" name="ai_agent">
+                <option value="default" selected>节气小助手 (默认)</option>
+                <option value="deepseek">DeepSeek 助手</option>
+            </select>
+        </div>
+
+        {# 输入区域和表单 #}
+        <form id="qa-form" class="chat-form">
+            <textarea id="user-question" name="question" rows="1" placeholder="问点关于二十四节气的事吧..." required></textarea>
+            <button type="submit" id="submit-button" class="qa-button">
+                <span class="button-text">发送</span>
+                <span class="loading-icon" style="display: none;"></span> {# Loading 动画容器 #}
+            </button>
+        </form>
+
+        {# 问题提示词区域 #}
+        <div class="prompt-suggestions">
+            <span>试试问：</span>
+            <button type="button" class="prompt-chip">立春有什么习俗？</button>
+            <button type="button" class="prompt-chip">夏至吃什么？</button>
+            <button type="button" class="prompt-chip">介绍一下“白露”</button>
+            <button type="button" class="prompt-chip">秋分的气候特点</button>
+        </div>
+    </div>
+
+    {# Copied scripts from templates/qa.html's scripts block #}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <script src="{{ url_for('static', filename='js/qa.js') }}"></script>
+</body>
+</html>

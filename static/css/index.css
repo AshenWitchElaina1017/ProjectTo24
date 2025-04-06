@@ -1,0 +1,329 @@
+/* --- Carousel Styles --- */
+.carousel-container {
+    width: 100%;
+    max-width: 800px; /* 或者你希望的宽度 */
+    height: 400px; /* 或者你希望的高度 */
+    margin: 20px auto 40px auto; /* 居中并添加上下边距 */
+    position: relative; /* 保持 relative 以便按钮绝对定位 */
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-slide {
+    width: 100%;
+    height: 100%;
+    position: relative; /* 让图片绝对定位 */
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 保持图片比例并覆盖容器 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.7s ease-in-out; /* 平滑过渡效果 */
+}
+
+.carousel-slide img.active {
+    opacity: 1; /* 显示当前图片 */
+}
+
+/* --- Carousel Controls (Prev/Next Buttons) --- */
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.4); /* 半透明背景 */
+    color: white;
+    border: none;
+    padding: 10px 15px; /* 调整内边距 */
+    font-size: 1.8em; /* 增大字体 */
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10; /* 确保在图片和点之上 */
+    border-radius: 5px; /* 轻微圆角 */
+    opacity: 0.7; /* 默认透明度 */
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.carousel-control.prev {
+    left: 15px; /* 距离左边框的距离 */
+}
+
+.carousel-control.next {
+    right: 15px; /* 距离右边框的距离 */
+}
+
+/* 鼠标悬停时提高按钮可见度 */
+.carousel-container:hover .carousel-control {
+    opacity: 1;
+}
+
+.carousel-control:hover {
+    background-color: rgba(0, 0, 0, 0.6); /* 悬停时背景更深 */
+}
+
+/* --- Carousel Dots --- */
+.carousel-dots {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10; /* 确保在按钮之上（如果需要的话） */
+}
+
+.carousel-dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-dot.active {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+
+/* --- Seasons & Terms Styles --- */
+.seasons-container {
+    max-width: 900px;
+    margin: 0 auto 40px auto; /* 居中并添加底部边距 */
+    padding: 20px;
+    background-color: #f9f9f9; /* 淡色背景 */
+    border-radius: 10px;
+}
+
+.seasons-container h2 {
+    text-align: center;
+    color: #5ab8ea; /* 主题色 */
+    margin-bottom: 25px;
+}
+
+.season-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* 移动端换行 */
+}
+
+.season-btn {
+    padding: 10px 25px;
+    font-size: 1.1em;
+    font-family: 'M PLUS Rounded 1c', sans-serif; /* 使用模板字体 */
+    cursor: pointer;
+    border: 2px solid transparent; /* 初始无边框 */
+    border-radius: 20px; /* 圆角 */
+    background-color: #e0e0e0; /* 默认背景 */
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.season-btn:hover {
+    background-color: #d1eaff;
+    color: #0363a1;
+}
+
+.season-btn.active {
+    background-color: #5ab8ea; /* 激活状态背景 */
+    color: white;
+    border-color: #3a95c5; /* 激活状态边框 */
+    box-shadow: 0 4px 8px rgba(90, 184, 234, 0.3);
+}
+
+.terms-display {
+    display: flex;
+    flex-wrap: wrap; /* 允许换行 */
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    min-height: 50px; /* 给点初始高度 */
+    padding: 15px 0;
+    border-bottom: 1px dashed #ccc; /* 分隔线 */
+}
+
+.term-item-btn {
+    padding: 8px 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex; /* 用于图标和文字对齐 */
+    align-items: center;
+    gap: 5px;
+}
+.term-item-btn:hover {
+    background-color: #f0f8ff; /* 淡蓝色背景 */
+    border-color: #a2d2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.term-item-btn.selected { /* 选中节气的样式 */
+    background-color: #cce7ff;
+    border-color: #5ab8ea;
+    color: #00568c;
+    font-weight: bold;
+}
+
+/* --- Term Details Styles --- */
+.term-details-container {
+    margin-top: 20px;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #eee;
+    min-height: 100px; /* 初始高度 */
+    line-height: 1.8;
+    color: #333;
+}
+
+.term-details-container h3 {
+    color: #00897b; /* 青色标题 */
+    margin-bottom: 15px;
+    font-size: 1.6em;
+    border-bottom: 2px solid #e0f2f1;
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+.term-details-container h3 .term-icon {
+     font-size: 1.2em;
+     margin-right: 10px;
+}
+
+.term-details-container strong {
+    color: #555;
+    min-width: 50px; /* 调整标签宽度 */
+    display: inline-block; /* 让 min-width 生效 */
+    margin-right: 5px; /* 标签和内容间距 */
+}
+
+.term-details-container ul {
+    list-style: none;
+    padding-left: 20px; /* 轻微缩进 */
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.term-details-container ul li {
+    margin-bottom: 8px;
+    position: relative;
+}
+/* 可以给列表项加点缀 */
+.term-details-container ul li::before {
+    content: '▹'; /* 或者其他符号 '•' '▸' */
+    position: absolute;
+    left: -15px;
+    color: #5ab8ea;
+}
+
+.term-details-container p { /* 给段落加点底部边距 */
+    margin-bottom: 10px;
+}
+
+.term-details-container p em { /* 标语样式 */
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+    color: #888;
+}
+
+/* 初始提示信息样式 */
+.terms-display p,
+.term-details-container p:first-child:not(:has(strong)) /* 只有当详情区只有一个 p 且不包含 strong 时（初始状态）*/
+{
+    color: #aaa;
+    text-align: center;
+    font-style: italic;
+    margin: 15px 0; /* 增加提示信息的边距 */
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .carousel-container {
+        height: 300px; /* 减小高度 */
+        border-radius: 10px; /* 减小圆角 */
+    }
+    .carousel-control {
+        padding: 8px 12px;
+        font-size: 1.5em;
+    }
+    .carousel-control.prev {
+        left: 10px;
+    }
+    .carousel-control.next {
+        right: 10px;
+    }
+    .carousel-dot {
+        width: 8px;
+        height: 8px;
+    }
+    .season-tabs {
+        gap: 10px;
+    }
+    .season-btn {
+        padding: 8px 18px;
+        font-size: 1em;
+    }
+    .terms-display {
+        gap: 10px;
+        padding: 10px 0;
+    }
+    .term-item-btn {
+        padding: 6px 12px;
+        font-size: 0.9em;
+    }
+    .term-details-container {
+        padding: 15px;
+    }
+    .term-details-container h3 {
+        font-size: 1.4em;
+    }
+    .term-details-container strong {
+        min-width: 40px;
+    }
+    .term-details-container ul {
+        padding-left: 15px;
+    }
+    .term-details-container ul li::before {
+        left: -12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-container {
+        height: 250px;
+    }
+    .seasons-container {
+        padding: 15px;
+    }
+    .season-btn {
+        padding: 6px 15px;
+        font-size: 0.9em;
+    }
+    .term-item-btn {
+        padding: 5px 10px;
+        font-size: 0.85em;
+    }
+     .term-details-container h3 {
+        font-size: 1.3em;
+    }
+    .term-details-container {
+        line-height: 1.7;
+    }
+}
+

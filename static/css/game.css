@@ -1,0 +1,279 @@
+/* --- General Game Container Styles --- */
+.game-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f4f9ff; /* 淡雅背景色 */
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    font-family: 'M PLUS Rounded 1c', sans-serif; /* 继承模板字体 */
+}
+
+.game-container h1 {
+    color: #3a7bd5; /* 主题蓝 */
+    margin-bottom: 10px;
+}
+
+.game-instructions {
+    color: #555;
+    margin-bottom: 25px;
+}
+
+/* --- Game Controls Styles --- */
+.game-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* 允许换行 */
+    gap: 15px; /* 元素间距 */
+    margin-bottom: 25px;
+    padding: 10px 20px;
+    background-color: #e9eff5;
+    border-radius: 8px;
+}
+
+/* Difficulty Selector Styles */
+.difficulty-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.difficulty-selector label {
+    color: #333;
+    font-weight: bold;
+}
+.difficulty-selector select {
+    padding: 5px 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 0.95em;
+    cursor: pointer;
+}
+
+/* Game Info (Moves & Timer) Styles */
+.game-info {
+     display: flex; /* 让步数和时间在一行 */
+     gap: 20px; /* 步数和时间之间的距离 */
+     flex-grow: 1; /* 占据剩余空间 */
+     justify-content: center; /* 居中显示 */
+}
+.game-info span {
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* General Game Button Style */
+.game-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    font-family: inherit;
+    background-color: #3a7bd5;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+.game-button:hover {
+    background-color: #2a5a9a;
+}
+.game-button:active {
+    transform: scale(0.98);
+}
+
+/* --- Game Board Styles --- */
+.game-board {
+    display: grid;
+    /* Grid columns set dynamically by JS */
+    gap: 10px;
+    max-width: 600px;
+    margin: 20px auto; /* 增加上边距 */
+    perspective: 1000px; /* Enable 3D transforms for children */
+}
+
+.loading-message {
+    grid-column: 1 / -1; /* Span all columns */
+    color: #888;
+    font-style: italic;
+    padding: 20px 0;
+}
+
+/* --- Card Styles --- */
+.card {
+    width: 100px; /* Card width */
+    height: 100px; /* Card height (square) */
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d; /* Necessary for 3D flip */
+    transition: transform 0.6s;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card.flipped {
+    transform: rotateY(180deg); /* The flip animation */
+}
+
+.card.matched {
+    cursor: default;
+    opacity: 0.5; /* Fade out matched cards */
+    transform: scale(0.95); /* Slightly shrink matched cards */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Card Face (Common Styles for Front and Back) */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Hide the side facing away from the user */
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* Stack icon and name vertically */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+    box-sizing: border-box; /* Include padding in width/height */
+    overflow: hidden; /* Prevent content spillover */
+}
+
+/* Card Front (Visible after flip) */
+.card-front {
+    background-color: #cce7ff; /* Softer blue */
+    color: #004a7c; /* Darker blue text */
+    transform: rotateY(180deg); /* Initially hidden */
+    padding: 5px; /* Adjust padding slightly */
+}
+
+/* Card Image Styles (replaces icon) */
+.card-image {
+    max-width: 70%; /* Control image size */
+    max-height: 65%; /* Control image size */
+    object-fit: contain; /* Ensure image fits well */
+    margin-bottom: 3px; /* Smaller space between image and name */
+}
+
+/* Card Name Styles (adjust for image) */
+.card-name {
+    font-size: 0.8em; /* Slightly smaller name */
+    font-weight: bold;
+    line-height: 1.1; /* Ensure text doesn't get cut off */
+}
+
+/* Card Back (Visible initially) */
+.card-back {
+    background-color: #b0c4de; /* Fallback color */
+    background-size: cover;
+    background-position: center;
+    /* Make sure the path to your card back image is correct */
+    background-image: url('../images/card-back.png');
+}
+
+/* --- Match Info Popup Styles --- */
+.match-info-popup {
+    position: fixed; /* Fixed position on screen */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center align */
+    background-color: rgba(255, 255, 255, 0.97); /* Slightly transparent white */
+    border: 2px solid #6fbf73; /* Green border */
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    z-index: 100; /* Ensure it's on top */
+    text-align: center;
+    width: 80%;
+    max-width: 350px;
+    opacity: 0; /* Initially hidden */
+    pointer-events: none; /* Initially not interactive */
+    transition: opacity 0.3s ease; /* Smooth fade transition */
+}
+
+/* Style for when the popup is visible */
+.match-info-popup:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.match-info-popup h3 {
+    color: #1b5e20; /* Dark green */
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+.match-info-popup p {
+    color: #333;
+    font-size: 1.1em;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* --- Win Message Styles --- */
+.win-message {
+    margin-top: 30px;
+    padding: 30px;
+    background-color: #e6ffed;
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    color: #2e7d32;
+}
+.win-message h2 {
+    color: #1b5e20;
+    margin-bottom: 15px;
+}
+.win-message p {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+.win-message span { /* Style for the dynamic values in win message */
+    font-weight: bold;
+    color: #1b5e20;
+}
+
+/* --- Utility Class --- */
+.hidden {
+    display: none; /* Hide element completely */
+}
+/* Ensure popup fades out smoothly */
+.match-info-popup.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease 0.1s; /* Slight delay before fade out */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 640px) {
+    .game-board {
+        max-width: 95%;
+        gap: 8px;
+    }
+    .card {
+        width: 80px;
+        height: 80px;
+    }
+    /* .card-icon removed */
+    .card-name { font-size: 0.75em; } /* Adjust name size for smaller cards */
+    .game-controls {
+        justify-content: center; /* Center controls on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 70px;
+        height: 70px;
+    }
+    /* .card-icon removed */
+    .card-name { font-size: 0.7em; } /* Adjust name size for very small cards */
+
+    .game-container h1 { font-size: 1.6em; }
+
+    /* Stack controls vertically on very small screens */
+    .game-controls { flex-direction: column; }
+    .game-info { flex-direction: column; gap: 5px; }
+    .game-info span { text-align: center; }
+    .difficulty-selector { flex-direction: column; gap: 5px; }
+}

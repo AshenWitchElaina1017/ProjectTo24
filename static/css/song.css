@@ -1,0 +1,118 @@
+.song-game-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.term-display {
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+#current-term {
+    font-weight: bold;
+    color: #007bff; /* Or a color that fits the theme */
+}
+
+.poem-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.poem-option-btn {
+    padding: 1rem;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    text-align: left; /* Align poem text to the left */
+    white-space: pre-wrap; /* Preserve whitespace and wrap text */
+    font-family: inherit; /* Ensure consistent font */
+}
+
+.poem-option-btn:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.poem-option-btn:active {
+    transform: translateY(0);
+}
+
+.result-display {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.result-display.correct {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.result-display.incorrect {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+#result-message {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+#correct-poem-info {
+    text-align: left;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
+
+#correct-poem-info p {
+    margin-bottom: 0.5rem;
+}
+
+#correct-poem-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+#correct-poem-author {
+    font-style: italic;
+    color: #555;
+}
+
+#correct-poem-text {
+    margin-top: 0.5rem;
+    white-space: pre-wrap; /* Ensure poem formatting is kept */
+    line-height: 1.6;
+    font-family: 'KaiTi', 'SimSun', serif; /* Use a suitable font for poems */
+}
+
+
+.next-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+}
+
+.next-btn:hover {
+    background-color: #0056b3;
+}

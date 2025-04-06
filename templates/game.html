@@ -1,0 +1,51 @@
+{% extends "template.html" %}
+{% block title %}
+二十四节气 - 游戏互动
+{% endblock %}
+{% block styles %}
+    {# 引入 game.css 样式文件 #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}">
+{% endblock %}
+{% block content %}
+<div class="game-container">
+    <h1>二十四节气 - 记忆匹配</h1>
+    <p class="game-instructions">点击卡片，找到所有匹配的节气！</p>
+    {# 游戏控制区域：包含难度选择、信息显示、重新开始按钮 #}
+    <div class="game-controls">
+        <div class="difficulty-selector">
+             <label for="difficulty">难度: </label>
+             <select id="difficulty" name="difficulty">
+                 <option value="6">简单 (6 对)</option>
+                 <option value="8" selected>普通 (8 对)</option>
+                 <option value="12">困难 (12 对)</option>
+             </select>
+         </div>
+        <div class="game-info">
+            <span>步数: <span id="moves-count">0</span></span>
+            <span>时间: <span id="timer">00:00</span></span>
+        </div>
+        <button id="restart-button" class="game-button">重新开始</button>
+    </div>
+    {# 游戏棋盘区域，卡片将由 JS 动态生成 #}
+    <div class="game-board" id="game-board">
+        <p class="loading-message">正在加载游戏...</p>
+    </div>
+    {# 匹配成功时显示节气信息的弹出层，默认隐藏 #}
+    <div id="match-info-popup" class="match-info-popup hidden">
+        <h3 id="popup-term-name">节气名称</h3>
+        <p id="popup-term-info">节气信息</p>
+    </div>
+    {# 游戏胜利时显示的消息，默认隐藏 #}
+    <div id="win-message" class="win-message hidden">
+        <h2>恭喜你！</h2>
+        <p>你成功匹配了所有节气！</p>
+        <p>难度: <span id="final-difficulty">普通</span></p> {# 显示最终难度 #}
+        <p>总步数: <span id="final-moves">0</span></p>
+        <p>总用时: <span id="final-time">00:00</span></p>
+        <button id="play-again-button" class="game-button">再玩一次</button>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <title>{% block title %}二十四节气小站{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="节气小筑 Logo"></a>
+        </div>
+        <div class="navbar-slogan">传统文化之二十四节气</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' else '' }}">首页</a></li>
+            <li><a href="{{ url_for('game') }}" class="{{ 'active' if request.endpoint == 'game' else '' }}">记忆匹配</a></li>
+            <li><a href="{{ url_for('song') }}" class="{{ 'active' if request.endpoint == 'song' else '' }}">诗词配对</a></li>
+            <li><a href="{{ url_for('qa') }}" class="{{ 'active' if request.endpoint == 'qa' else '' }}">AI问答</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 二十四节气-by-Eulus</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/template.js') }}" defer></script>
+    {% block scripts %}{% endblock %}
+
+    <!-- AI Assistant Button -->
+    <div id="ai-assistant-button">
+        <span>AI助手</span>
+    </div>
+
+    <!-- AI Chat Window -->
+    <div id="ai-chat-window" class="hidden">
+        <div id="chat-header">
+            <span>AI助手</span>
+            <button id="close-chat-button">&times;</button>
+        </div>
+        <div id="chat-content">
+            <!-- Content from qa_iframe.html will be loaded here -->
+             <iframe src="{{ url_for('qa_iframe') }}" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+        </div>
+    </div>
+</body>
+</html>
