@@ -3,31 +3,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatWindow = document.getElementById('ai-chat-window');
     const closeChatButton = document.getElementById('close-chat-button');
 
-    // Check if we are on the main QA page
+    // 检查当前是否在主 QA 页面
     if (window.location.pathname === '/qa') {
         if (assistantButton) {
-            assistantButton.style.display = 'none'; // Hide the button on the /qa page
+            assistantButton.style.display = 'none'; // 在 /qa 页面隐藏按钮
         }
-        // Optionally hide the chat window as well if it shouldn't appear on /qa
+        // 可选：如果聊天窗口也不应出现在 /qa 上，则隐藏它
         // if (chatWindow) {
         //     chatWindow.style.display = 'none';
         // }
-        // return; // REMOVED: Allow script to continue for menu toggle logic
+        // return; // 已移除: 允许脚本继续执行菜单切换逻辑
     }
 
-    // AI Assistant Logic
+    // AI 助手逻辑
     if (assistantButton && chatWindow && closeChatButton) {
-        // Toggle chat window visibility when assistant button is clicked
+        // 点击助手按钮时切换聊天窗口的可见性
         assistantButton.addEventListener('click', () => {
             chatWindow.classList.toggle('hidden');
         });
 
-        // Hide chat window when close button is clicked
+        // 点击关闭按钮时隐藏聊天窗口
         closeChatButton.addEventListener('click', () => {
             chatWindow.classList.add('hidden');
         });
 
-        // Optional: Hide chat window if clicked outside of it
+        // 可选：如果点击聊天窗口外部则隐藏它
         // document.addEventListener('click', (event) => {
         //     if (!chatWindow.contains(event.target) && !assistantButton.contains(event.target)) {
         //         chatWindow.classList.add('hidden');
@@ -37,24 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("AI Assistant elements not found on a non-QA page!");
     }
 
-    // Hamburger Menu Toggle Logic
+    // 汉堡菜单切换逻辑
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
 
     if (menuToggle && navLinks) {
         menuToggle.addEventListener('click', () => {
-            // Toggle the 'active' class on the button for styling (X icon)
+            // 切换按钮上的 'active' 类以进行样式设置（X 图标）
             menuToggle.classList.toggle('active');
 
-            // Toggle the 'nav-active' class on the nav links to show/hide
+            // 切换导航链接上的 'nav-active' 类以显示/隐藏
             navLinks.classList.toggle('nav-active');
 
-            // Update aria-expanded attribute for accessibility
+            // 更新 aria-expanded 属性以提高可访问性
             const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
             menuToggle.setAttribute('aria-expanded', !isExpanded);
         });
 
-        // Optional: Close menu when a link is clicked (useful for single-page apps or smooth scrolling)
+        // 可选：点击链接时关闭菜单（对单页应用或平滑滚动有用）
         // navLinks.querySelectorAll('a').forEach(link => {
         //     link.addEventListener('click', () => {
         //         if (navLinks.classList.contains('nav-active')) {
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //     });
         // });
 
-        // Optional: Close menu if clicked outside of it
+        // 可选：如果点击菜单外部则关闭它
         // document.addEventListener('click', (event) => {
         //     const isClickInsideNav = navLinks.contains(event.target);
         //     const isClickOnToggle = menuToggle.contains(event.target);
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // });
 
     } else {
-         // Only log error if menu toggle is expected (i.e., not on specific pages if needed)
-         // console.error("Menu toggle or nav links element not found!");
+         // 仅在预期菜单切换时记录错误（即，如果需要，不在特定页面上）
+         // console.error("未找到菜单切换或导航链接元素!");
     }
-}); // End of DOMContentLoaded
+}); // DOMContentLoaded 结束

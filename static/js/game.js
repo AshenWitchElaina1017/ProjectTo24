@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Get DOM Elements ---
+    // --- 获取 DOM 元素 ---
     const gameBoard = document.getElementById('game-board');
     const movesCountSpan = document.getElementById('moves-count');
     const timerSpan = document.getElementById('timer');
@@ -14,108 +14,108 @@ document.addEventListener('DOMContentLoaded', () => {
     const difficultySelect = document.getElementById('difficulty');
     const finalDifficultySpan = document.getElementById('final-difficulty');
 
-    // --- Game State Variables ---
-    let allSolarTerms = [];     // Stores the full list from JSON
-    let firstCard = null;       // Stores the first flipped card element
-    let secondCard = null;      // Stores the second flipped card element
-    let lockBoard = false;      // Prevents clicking during checks/animations
-    let moves = 0;              // Counts player moves
-    let matchedPairs = 0;       // Counts found pairs
-    let totalPairs = 8;         // Number of pairs based on difficulty (default: Normal)
-    let timerInterval = null;   // Holds the interval ID for the timer
-    let secondsElapsed = 0;     // Counts seconds passed
-    let popupTimeout = null;    // Holds the timeout ID for the info popup
+    // --- 游戏状态变量 ---
+    let allSolarTerms = [];     // 存储从 JSON 加载的完整列表
+    let firstCard = null;       // 存储翻开的第一张卡牌元素
+    let secondCard = null;      // 存储翻开的第二张卡牌元素
+    let lockBoard = false;      // 在检查/动画期间阻止点击
+    let moves = 0;              // 记录玩家步数
+    let matchedPairs = 0;       // 记录找到的配对数量
+    let totalPairs = 8;         // 根据难度确定的配对总数（默认：普通）
+    let timerInterval = null;   // 保存计时器的 interval ID
+    let secondsElapsed = 0;     // 记录经过的秒数
+    let popupTimeout = null;    // 保存信息弹窗的 timeout ID
 
-    // --- Helper Function: Format Time (Seconds to MM:SS) ---
+    // --- 辅助函数：格式化时间（秒 转 MM:SS）---
     function formatTime(totalSeconds) {
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
         return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }
 
-    // --- Helper Function: Shuffle Array (Fisher-Yates Algorithm) ---
+    // --- 辅助函数：洗牌数组（Fisher-Yates 算法）---
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            [array[i], array[j]] = [array[j], array[i]]; // 交换元素
         }
         return array;
     }
 
-    // --- Helper Function: Get Random Subset of Terms ---
+    // --- 辅助函数：获取随机节气子集 ---
     function getRandomTerms(termsArray, count) {
-        const shuffled = shuffleArray([...termsArray]); // Shuffle a copy
-        return shuffled.slice(0, count); // Take the first 'count' elements
+        const shuffled = shuffleArray([...termsArray]); // 洗牌一个副本
+        return shuffled.slice(0, count); // 取前 'count' 个元素
     }
 
-    // --- Helper Function: Calculate Grid Columns for Layout ---
+    // --- 辅助函数：计算布局的网格列数 ---
     function calculateGridColumns(totalCards) {
         if (totalCards <= 9) return 3;
-        if (totalCards <= 12) return 4; // For 6 pairs
-        if (totalCards <= 16) return 4; // For 8 pairs
+        if (totalCards <= 12) return 4; // 6 对
+        if (totalCards <= 16) return 4; // 8 对
         if (totalCards <= 20) return 5;
-        if (totalCards <= 24) return 6; // For 12 pairs
-        return Math.ceil(Math.sqrt(totalCards)); // Fallback for other numbers
+        if (totalCards <= 24) return 6; // 12 对
+        return Math.ceil(Math.sqrt(totalCards)); // 其他数量的备用方案
     }
 
-     // --- Helper Function: Start Timer ---
+     // --- 辅助函数：启动计时器 ---
      function startTimer() {
-        stopTimer(); // Clear any existing timer
+        stopTimer(); // 清除任何现有的计时器
         timerInterval = setInterval(() => {
             secondsElapsed++;
             timerSpan.textContent = formatTime(secondsElapsed);
-        }, 1000); // Update every second
+        }, 1000); // 每秒更新
     }
 
-    // --- Helper Function: Stop Timer ---
+    // --- 辅助函数：停止计时器 ---
     function stopTimer() {
         clearInterval(timerInterval);
         timerInterval = null;
     }
 
 
-    // --- Core Game Logic ---
+    // --- 核心游戏逻辑 ---
 
-    // Initialize or Reset the Game
+    // 初始化或重置游戏
     function initGame() {
         console.log("Initializing game...");
-        // Read selected difficulty
+        // 读取选择的难度
         totalPairs = parseInt(difficultySelect.value, 10);
 
-        // Reset game variables
+        // 重置游戏变量
         moves = 0;
         matchedPairs = 0;
         secondsElapsed = 0;
         firstCard = null;
         secondCard = null;
         lockBoard = false;
-        stopTimer(); // Stop timer
-        timerSpan.textContent = formatTime(secondsElapsed); // Reset timer display
-        movesCountSpan.textContent = moves; // Reset moves display
+        stopTimer(); // 停止计时器
+        timerSpan.textContent = formatTime(secondsElapsed); // 重置计时器显示
+        movesCountSpan.textContent = moves; // 重置步数显示
 
-        // Reset UI elements
-        gameBoard.innerHTML = '<p class="loading-message">正在选择节气...</p>'; // Show loading
-        winMessageDiv.classList.add('hidden'); // Hide win message
-        matchInfoPopup.classList.add('hidden'); // Hide info popup
-        clearTimeout(popupTimeout); // Clear any lingering popup timer
+        // 重置 UI 元素
+        gameBoard.innerHTML = '<p class="loading-message">正在选择节气...</p>'; // 显示加载中
+        winMessageDiv.classList.add('hidden'); // 隐藏胜利信息
+        matchInfoPopup.classList.add('hidden'); // 隐藏信息弹窗
+        clearTimeout(popupTimeout); // 清除任何残留的弹窗计时器
 
-        // Fetch data if not already loaded, otherwise setup board directly
+        // 如果数据尚未加载则获取数据，否则直接设置棋盘
         if (allSolarTerms.length === 0) {
             fetchSolarTerms();
         } else if (allSolarTerms.length < totalPairs) {
-            // Handle case where previously loaded data is insufficient for new difficulty
+            // 处理先前加载的数据不足以满足新难度的情况
             console.warn("需要重新加载数据以满足新的难度级别。")
             fetchSolarTerms();
         }
         else {
-            setupBoard(); // Use already loaded data
+            setupBoard(); // 使用已加载的数据
         }
     }
 
-    // Fetch Solar Terms Data from JSON
+    // 从 JSON 获取节气数据
     function fetchSolarTerms() {
         console.log("Fetching solar terms data...");
-        fetch('/static/data/solar_terms.json') // Ensure this path is correct
+        fetch('/static/data/solar_terms.json') // 确保此路径正确
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -124,11 +124,11 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(data => {
                 allSolarTerms = data.solar_terms;
-                if (!allSolarTerms || allSolarTerms.length < totalPairs) { // Check if enough data for selected difficulty
+                if (!allSolarTerms || allSolarTerms.length < totalPairs) { // 检查是否有足够的数据用于所选难度
                     throw new Error('节气数据不足或格式错误，无法开始所选难度');
                 }
                 console.log(`节气数据加载成功，总数: ${allSolarTerms.length}`);
-                setupBoard(); // Setup board after data is loaded
+                setupBoard(); // 数据加载后设置棋盘
             })
             .catch(error => {
                 console.error('无法加载节气数据:', error);
@@ -136,71 +136,71 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Setup the Game Board with Cards
+    // 设置带卡牌的游戏棋盘
     function setupBoard() {
         console.log(`设置棋盘，难度: ${totalPairs} 对`);
-        // 1. Select random terms based on difficulty
+        // 1. 根据难度选择随机节气
         const selectedTerms = getRandomTerms(allSolarTerms, totalPairs);
 
-        // 2. Create card data pairs (image path, name, id, and extra info)
+        // 2. 创建卡牌数据对（图像路径、名称、ID 和额外信息）
         const gameCardsData = [];
         selectedTerms.forEach(term => {
-            // Find the index of the term in the original full list to determine the image number
+            // 在原始完整列表中查找节气的索引以确定图像编号
             const termIndex = allSolarTerms.findIndex(t => t.id === term.id);
-            const imageNumber = String(termIndex + 1).padStart(2, '0'); // Format as 01, 02, etc.
-            const imagePath = `/static/images/${imageNumber}.png`; // Construct image path
+            const imageNumber = String(termIndex + 1).padStart(2, '0'); // 格式化为 01, 02 等
+            const imagePath = `/static/images/${imageNumber}.png`; // 构建图像路径
 
             const cardInfo = {
                 name: term.name,
-                imagePath: imagePath, // Use image path instead of icon
+                imagePath: imagePath, // 使用图像路径而不是图标
                 matchId: term.id,
-                description: term.description || '暂无详细描述。', // Add description for popup
-                customs: term.customs || '', // Add customs for potential future use
-                phenology: term.phenology ? term.phenology.join(' ') : '', // Add phenology for potential future use
+                description: term.description || '暂无详细描述。', // 为弹窗添加描述
+                customs: term.customs || '', // 添加习俗以备将来使用
+                phenology: term.phenology ? term.phenology.join(' ') : '', // 添加物候以备将来使用
                 tagline: term.tagline || ''
             };
-            // Add two identical cards for each term to form a pair
+            // 为每个节气添加两张相同的卡牌以形成一对
             gameCardsData.push(cardInfo, { ...cardInfo });
         });
 
         // 3. Shuffle the card data
         const shuffledCardsData = shuffleArray(gameCardsData);
 
-        // 4. Create HTML elements for each card
-        gameBoard.innerHTML = ''; // Clear previous board/loading message
+        // 4. 为每张卡牌创建 HTML 元素
+        gameBoard.innerHTML = ''; // 清除之前的棋盘/加载消息
         const columns = calculateGridColumns(shuffledCardsData.length);
-        gameBoard.style.gridTemplateColumns = `repeat(${columns}, auto)`; // Set grid layout
+        gameBoard.style.gridTemplateColumns = `repeat(${columns}, auto)`; // 设置网格布局
 
         shuffledCardsData.forEach(cardData => {
             const cardElement = document.createElement('div');
             cardElement.classList.add('card');
-            // Store matching and info data directly on the element using dataset
+            // 使用 dataset 直接在元素上存储匹配和信息数据
             cardElement.dataset.matchId = cardData.matchId;
             cardElement.dataset.termName = cardData.name;
-            cardElement.dataset.termDescription = cardData.description; // Store description
-            cardElement.dataset.termCustoms = cardData.customs;       // Store customs
-            cardElement.dataset.termPhenology = cardData.phenology;   // Store phenology
+            cardElement.dataset.termDescription = cardData.description; // 存储描述
+            cardElement.dataset.termCustoms = cardData.customs;       // 存储习俗
+            cardElement.dataset.termPhenology = cardData.phenology;   // 存储物候
             cardElement.dataset.termTagline = cardData.tagline;
 
-            // Create Card Front (with icon and name)
+            // 创建卡牌正面（带图标和名称）
             const cardFaceFront = document.createElement('div');
             cardFaceFront.classList.add('card-face', 'card-front');
-            // Create image element for the front face
+            // 为正面创建图像元素
             const cardImage = document.createElement('img');
-            cardImage.classList.add('card-image'); // Add class for styling
+            cardImage.classList.add('card-image'); // 添加样式类
             cardImage.src = cardData.imagePath;
-            cardImage.alt = cardData.name; // Set alt text for accessibility
-            // Optionally add the name below the image
+            cardImage.alt = cardData.name; // 为可访问性设置 alt 文本
+            // 可选地在图像下方添加名称
             const nameSpan = document.createElement('span');
             nameSpan.classList.add('card-name');
             nameSpan.textContent = cardData.name;
             cardFaceFront.appendChild(cardImage);
-            cardFaceFront.appendChild(nameSpan); // Append name after image
+            cardFaceFront.appendChild(nameSpan); // 在图像后附加名称
 
-            // Create Card Back
+            // 创建卡牌背面
             const cardFaceBack = document.createElement('div');
             cardFaceBack.classList.add('card-face', 'card-back');
-            // Background image for back is set in CSS
+            // 背面的背景图像在 CSS 中设置
 
             cardElement.appendChild(cardFaceFront);
             cardElement.appendChild(cardFaceBack);
@@ -214,9 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
         startTimer();
     }
 
-    // Handle Click on a Card
+    // 处理卡牌点击事件
     function handleCardClick(event) {
-        if (lockBoard) return; // Do nothing if board is locked
+        if (lockBoard) return; // 如果棋盘已锁定，则不执行任何操作
         const clickedCard = event.currentTarget;
 
         // Prevent clicking the same card twice or an already matched card
@@ -228,112 +228,112 @@ document.addEventListener('DOMContentLoaded', () => {
         clickedCard.classList.add('flipped');
 
         if (!firstCard) {
-            // This is the first card flipped in a turn
+            // 这是本轮翻开的第一张卡牌
             firstCard = clickedCard;
         } else {
-            // This is the second card flipped
+            // 这是翻开的第二张卡牌
             secondCard = clickedCard;
-            lockBoard = true; // Lock the board to prevent more clicks
-            incrementMoves(); // Increment move counter
-            checkForMatch(); // Check if the two cards match
+            lockBoard = true; // 锁定棋盘以防止更多点击
+            incrementMoves(); // 增加步数计数器
+            checkForMatch(); // 检查两张卡牌是否匹配
         }
     }
 
-    // Increment Moves Counter
+    // 增加步数计数器
     function incrementMoves() {
         moves++;
         movesCountSpan.textContent = moves;
     }
 
-    // Check if the Two Flipped Cards Match
+    // 检查两张翻开的卡牌是否匹配
     function checkForMatch() {
         const isMatch = firstCard.dataset.matchId === secondCard.dataset.matchId;
 
         if (isMatch) {
-            showMatchInfo(firstCard); // Show info popup for the matched term
-            // Use setTimeout to allow popup to show before disabling
-            setTimeout(disableCards, 600); // Disable cards after a short delay
+            showMatchInfo(firstCard); // 显示匹配节气的信息弹窗
+            // 使用 setTimeout 以便在禁用卡牌前显示弹窗
+            setTimeout(disableCards, 600); // 短暂延迟后禁用卡牌
         } else {
-            unflipCards(); // Flip cards back if they don't match
+            unflipCards(); // 如果不匹配则翻回卡牌
         }
     }
 
-    // Show Info Popup for Matched Term
+    // 显示匹配节气的信息弹窗
     function showMatchInfo(card) {
         const termName = card.dataset.termName;
-        // Use the full description for the popup info
+        // 使用完整描述作为弹窗信息
         const termInfo = card.dataset.termDescription || '暂无详细描述。'; // Prioritize description
 
         popupTermName.textContent = termName;
         popupTermInfo.textContent = termInfo;
-        matchInfoPopup.classList.remove('hidden'); // Show the popup
+        matchInfoPopup.classList.remove('hidden'); // 显示弹窗
 
-        // Clear any previous timeout for the popup
+        // 清除之前为弹窗设置的任何超时
         clearTimeout(popupTimeout);
 
-        // Set a timeout to automatically hide the popup after a few seconds
+        // 设置超时以在几秒钟后自动隐藏弹窗
         popupTimeout = setTimeout(() => {
             matchInfoPopup.classList.add('hidden');
-        }, 2500); // Display for 2.5 seconds
+        }, 2500); // 显示 2.5 秒
     }
 
 
-    // Disable Matched Cards (Make them unclickable and visually distinct)
+    // 禁用匹配的卡牌（使其不可点击并在视觉上区分）
     function disableCards() {
         firstCard.removeEventListener('click', handleCardClick);
         secondCard.removeEventListener('click', handleCardClick);
         firstCard.classList.add('matched');
         secondCard.classList.add('matched');
 
-        matchedPairs++; // Increment matched pair count
-        resetBoardState(); // Reset for the next turn
+        matchedPairs++; // 增加匹配对计数
+        resetBoardState(); // 为下一轮重置状态
 
-        // Check if all pairs have been found
+        // 检查是否所有对都已找到
         if (matchedPairs === totalPairs) {
             winGame();
         }
     }
 
-    // Flip Non-Matching Cards Back Over
+    // 将不匹配的卡牌翻回去
     function unflipCards() {
-        // Wait a bit before flipping back so the player can see the second card
+        // 稍等片刻再翻回去，以便玩家可以看到第二张卡牌
         setTimeout(() => {
             if (firstCard) firstCard.classList.remove('flipped');
             if (secondCard) secondCard.classList.remove('flipped');
-            resetBoardState(); // Reset for the next turn
-        }, 1200); // Delay (1.2 seconds)
+            resetBoardState(); // 为下一轮重置状态
+        }, 1200); // 延迟（1.2 秒）
     }
 
-    // Reset Card State After a Turn (Match or No Match)
+    // 一轮结束后重置卡牌状态（无论是否匹配）
     function resetBoardState() {
         [firstCard, secondCard, lockBoard] = [null, null, false];
     }
 
-    // Handle Game Win Condition
+    // 处理游戏胜利条件
     function winGame() {
         console.log("游戏胜利!");
-        stopTimer(); // Stop the game timer
+        stopTimer(); // 停止游戏计时器
 
-        // Get the text of the selected difficulty
+        // 获取所选难度的文本
         const difficultyText = difficultySelect.options[difficultySelect.selectedIndex].text;
 
-        // Update and display the win message
-        finalDifficultySpan.textContent = difficultyText; // Show difficulty level
+        // 更新并显示胜利信息
+        finalDifficultySpan.textContent = difficultyText; // 显示难度级别
         finalMovesSpan.textContent = moves;
         finalTimeSpan.textContent = formatTime(secondsElapsed);
         winMessageDiv.classList.remove('hidden');
 
-        // Ensure info popup is hidden when win message shows
+        // 确保显示胜利信息时隐藏信息弹窗
         matchInfoPopup.classList.add('hidden');
         clearTimeout(popupTimeout);
     }
 
-    // --- Event Listeners ---
-    restartButton.addEventListener('click', initGame); // Restart button click
-    playAgainButton.addEventListener('click', initGame); // Play Again button click (in win message)
-    difficultySelect.addEventListener('change', initGame); // Difficulty change re-initializes game
+    // --- 事件监听器 ---
+    restartButton.addEventListener('click', initGame); // 重启按钮点击
+    playAgainButton.addEventListener('click', initGame); // 再玩一次按钮点击（在胜利信息中）
+    difficultySelect.addEventListener('change', initGame); // 难度更改会重新初始化游戏
 
-    // --- Start the Game on Page Load ---
+    // --- 页面加载时启动游戏 ---
     initGame();
 
-}); // End of DOMContentLoaded listener
+}); // DOMContentLoaded 监听器结束

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- DOM Element Selection ---
+    // --- DOM 元素选择 ---
     const carouselContainer = document.querySelector('.carousel-container');
     const carouselSlide = document.querySelector('.carousel-slide');
     const carouselDotsContainer = document.querySelector('.carousel-dots');
@@ -9,18 +9,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const termsDisplay = document.querySelector('.terms-display');
     const termDetailsContainer = document.getElementById('term-details');
 
-    // --- State Variables ---
+    // --- 状态变量 ---
     let allSolarTermsData = [];
     let currentCarouselIndex = 0;
     let carouselInterval;
-    const totalImages = 24; // Total number of images (01.png to 24.png)
-    const imageBaseUrl = '/static/images/'; // Base path for images
-    const jsonUrl = '/static/data/solar_terms.json'; // Path to your JSON data
+    const totalImages = 24; // 图片总数（01.png 到 24.png）
+    const imageBaseUrl = '/static/images/'; // 图片的基础路径
+    const jsonUrl = '/static/data/solar_terms.json'; // JSON 数据的路径
 
-    // --- Function Definitions ---
+    // --- 函数定义 ---
 
     /**
-     * Fetches solar term data from the JSON file.
+     * 从 JSON 文件获取节气数据。
      */
     function loadSolarTermData() {
         fetch(jsonUrl)
@@ -33,15 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 allSolarTermsData = data.solar_terms;
                 console.log("节气数据加载成功:", allSolarTermsData);
-                initializePage(); // Initialize after data is loaded
+                initializePage(); // 数据加载后初始化
             })
             .catch(error => {
                 console.error('无法加载节气数据:', error);
                 termsDisplay.innerHTML = '<p>无法加载节气信息，请刷新页面或联系管理员。</p>';
-                termDetailsContainer.innerHTML = ''; // Clear details area on error
-                // Optionally disable carousel if data fails? Or let it run with images.
+                termDetailsContainer.innerHTML = ''; // 出错时清除详情区域
+                // 可选：如果数据加载失败则禁用轮播图？或者让它仅用图片运行。
                 if (carouselSlide && carouselDotsContainer && prevButton && nextButton) {
-                     setupCarousel(); // Setup carousel even if data fails, if images exist
+                     setupCarousel(); // 即使数据加载失败，如果图片存在，也设置轮播图
                 } else {
                     console.error("轮播图必需的HTML元素未找到！");
                 }
@@ -49,28 +49,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Initializes the page: sets up carousel, displays initial terms and details.
+     * 初始化页面：设置轮播图，显示初始节气和详情。
      */
     function initializePage() {
         if (!carouselSlide || !carouselDotsContainer || !prevButton || !nextButton) {
              console.error("轮播图必需的HTML元素未找到！无法初始化轮播图。");
-             // Proceed with initializing terms/details if possible
+             // 如果可能，继续初始化节气/详情
         } else {
-             setupCarousel(); // Setup carousel now that data is potentially ready
+             setupCarousel(); // 现在数据可能已准备好，设置轮播图
         }
 
 
-        // Display terms for the default season (Spring)
+        // 显示默认季节（春季）的节气
         displayTermsForSeason('Spring');
 
         // Display details for the first term of the default season
         if (allSolarTermsData.length > 0) {
-            const defaultSeason = 'Spring'; // Or get active tab's season
+            const defaultSeason = 'Spring'; // 或获取活动选项卡的季节
             const firstTermOfDefaultSeason = allSolarTermsData.find(term => term.season === defaultSeason);
             if (firstTermOfDefaultSeason) {
                 displayTermDetails(firstTermOfDefaultSeason.id);
                 // Highlight the corresponding term button after a brief delay
-                 setTimeout(() => highlightSelectedTerm(firstTermOfDefaultSeason.id), 50); // Small delay
+                 setTimeout(() => highlightSelectedTerm(firstTermOfDefaultSeason.id), 50); // 短暂延迟
             } else {
                 termDetailsContainer.innerHTML = `<p>请选择一个节气查看详细介绍。</p>`;
             }
@@ -80,57 +80,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Sets up the image carousel, including images, dots, controls, and auto-play.
+     * 设置图片轮播图，包括图片、指示点、控件和自动播放。
      */
     function setupCarousel() {
-        carouselSlide.innerHTML = ''; // Clear previous content
-        carouselDotsContainer.innerHTML = ''; // Clear previous dots
+        carouselSlide.innerHTML = ''; // 清除先前内容
+        carouselDotsContainer.innerHTML = ''; // 清除先前的指示点
 
-        // Generate images and dots
+        // 生成图片和指示点
         for (let i = 1; i <= totalImages; i++) {
             const img = document.createElement('img');
             const imageName = String(i).padStart(2, '0') + '.png';
             img.src = `${imageBaseUrl}${imageName}`;
             img.alt = `二十四节气图片 ${i}`;
-            if (i === 1) img.classList.add('active'); // First image active by default
+            if (i === 1) img.classList.add('active'); // 默认第一张图片为活动状态
             carouselSlide.appendChild(img);
 
             const dot = document.createElement('span');
             dot.classList.add('carousel-dot');
             if (i === 1) dot.classList.add('active');
-            dot.dataset.index = i - 1; // Store index (0-based)
+            dot.dataset.index = i - 1; // 存储索引（从 0 开始）
             carouselDotsContainer.appendChild(dot);
         }
 
         const images = carouselSlide.querySelectorAll('img');
         const dots = carouselDotsContainer.querySelectorAll('.carousel-dot');
 
-        // Function to show a specific slide by index
+        // 按索引显示特定幻灯片的函数
         function showSlide(index) {
-            index = (index + totalImages) % totalImages; // Ensure index is within bounds
+            index = (index + totalImages) % totalImages; // 确保索引在边界内
             images.forEach((img, i) => img.classList.toggle('active', i === index));
             dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
             currentCarouselIndex = index;
         }
 
-        // Auto-play functionality
+        // 自动播放功能
         function startCarousel() {
-            stopCarousel(); // Clear existing interval first
+            stopCarousel(); // 首先清除现有的 interval
             carouselInterval = setInterval(() => {
                 showSlide(currentCarouselIndex + 1);
-            }, 3000); // Change slide every 3 seconds
+            }, 3000); // 每 3 秒更换幻灯片
         }
 
         function stopCarousel() {
             clearInterval(carouselInterval);
         }
 
-        // Event listeners for controls and dots
+        // 控件和指示点的事件监听器
         dots.forEach(dot => {
             dot.addEventListener('click', (e) => {
                 stopCarousel();
                 showSlide(parseInt(e.target.dataset.index, 10));
-                startCarousel(); // Restart auto-play after manual interaction
+                startCarousel(); // 手动交互后重新启动自动播放
             });
         });
 
@@ -146,20 +146,20 @@ document.addEventListener('DOMContentLoaded', () => {
             startCarousel();
         });
 
-        // Pause on hover
+        // 悬停时暂停
         carouselContainer.addEventListener('mouseenter', stopCarousel);
         carouselContainer.addEventListener('mouseleave', startCarousel);
 
-        startCarousel(); // Start the auto-play initially
+        startCarousel(); // 初始启动自动播放
     }
 
     /**
-     * Displays the list of solar terms for the selected season.
-     * @param {string} season - The season identifier ('Spring', 'Summer', etc.).
+     * 显示所选季节的节气列表。
+     * @param {string} season - 季节标识符（'Spring', 'Summer' 等）。
      */
     function displayTermsForSeason(season) {
         const terms = allSolarTermsData.filter(term => term.season === season);
-        termsDisplay.innerHTML = ''; // Clear previous term buttons
+        termsDisplay.innerHTML = ''; // 清除先前的节气按钮
 
         if (terms.length > 0) {
             terms.forEach(term => {
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 termButton.addEventListener('click', () => {
                     displayTermDetails(term.id);
-                    highlightSelectedTerm(term.id); // Highlight clicked term
+                    highlightSelectedTerm(term.id); // 高亮点击的节气
                 });
                 termsDisplay.appendChild(termButton);
             });
@@ -182,8 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Highlights the currently selected term button and removes highlight from others.
-     * @param {string} termId - The ID of the term to highlight.
+     * 高亮当前选中的节气按钮并移除其他按钮的高亮。
+     * @param {string} termId - 要高亮的节气的 ID。
      */
     function highlightSelectedTerm(termId) {
         document.querySelectorAll('.term-item-btn').forEach(btn => {
@@ -192,13 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Displays the detailed information for a specific solar term.
-     * @param {string} termId - The ID of the solar term.
+     * 显示特定节气的详细信息。
+     * @param {string} termId - 节气的 ID。
      */
     function displayTermDetails(termId) {
         const term = allSolarTermsData.find(t => t.id === termId);
         if (term) {
-            // Build the HTML string for details
+            // 构建详情的 HTML 字符串
             let detailsHtml = `
                 <h3>
                     ${term.icon ? `<span class="term-icon">${term.icon}</span>` : ''}
@@ -229,9 +229,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Event Listeners ---
+    // --- 事件监听器 ---
 
-    // Season Tab Clicks
+    // 季节选项卡点击
     seasonTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             seasonTabs.forEach(t => t.classList.remove('active'));
@@ -239,11 +239,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const season = tab.dataset.season;
             displayTermsForSeason(season);
 
-            // Display first term of the newly selected season or a prompt
+            // 显示新选定季节的第一个节气或提示
             const firstTermOfSeason = allSolarTermsData.find(term => term.season === season);
             if (firstTermOfSeason) {
                 displayTermDetails(firstTermOfSeason.id);
-                 // Highlight the first term button after a brief delay
+                 // 短暂延迟后高亮第一个节气按钮
                  setTimeout(() => highlightSelectedTerm(firstTermOfSeason.id), 50);
             } else {
                 termDetailsContainer.innerHTML = `<p>请选择一个节气查看详细介绍。</p>`;
@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Initial Load ---
-    loadSolarTermData(); // Start the process by loading the data
+    // --- 初始加载 ---
+    loadSolarTermData(); // 通过加载数据开始流程
 
-}); // End of DOMContentLoaded
+}); // DOMContentLoaded 结束
