@@ -58,42 +58,28 @@ body {
 /* 新增：导航栏标语样式 */
 .navbar .navbar-slogan {
     /* 赛博朋克风格 - 基础色使用亮粉色 */
-    color: #507af0; /* Magenta/Bright Pink */
+    color: #1a4e8a; /* 更换为沉稳的深蓝色 */
 
-    font-size: 3em; /* 调整回稍合适的尺寸 */
-    font-weight: 900; /* 加粗字体 */
+    font-size: 3em; /* 字体大小不变 */
+    font-weight: 900; /* 字体粗细不变 */
 
-    /* 赛博朋克霓虹辉光效果 text-shadow */
-    text-shadow:
-        0 0 5px #540a54,   /* Magenta inner glow */
-        0 0 10px #676ef8,  /* Magenta medium glow */
-        0 0 20px #a071f7,  /* Magenta outer glow */
-        0 0 30px #00ffff,  /* Cyan secondary glow */
-        0 0 40px #00ffff,  /* Cyan wider secondary glow */
-        0 0 55px #00ffff,  /* Cyan faint outer glow */
-        0 0 70px #ffffff;  /* White subtle edge highlight (optional) */
+    /* 应用简单柔和的阴影 */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 
     /* 调整外边距，使其与 Logo 和链接保持一定距离 */
     margin: 0 20px; /* 左右外边距 */
     /* 让标语在 flex 布局中占据一定空间，但允许压缩 */
     flex-grow: 1; /* 占据多余空间，将链接推到右侧 */
     text-align: center; /* 文字居中 */
-    transition: text-shadow 0.4s ease-in-out, color 0.4s ease; /* 平滑过渡 */
+    transition: text-shadow 0.3s ease; /* 保留阴影过渡 */
 }
 
-/* (可选) 添加悬停效果 */
+/* 移除复杂的悬停效果 */
+/*
 .navbar .navbar-slogan:hover {
-     /* 悬停时增强辉光并改变主色调 */
-     color: #00ffff; /* Cyan */
-     text-shadow:
-        0 0 6px #00ffff,   /* Cyan inner glow */
-        0 0 12px #00ffff,  /* Cyan medium glow */
-        0 0 25px #00ffff,  /* Cyan outer glow */
-        0 0 35px #ff00ff,  /* Magenta secondary glow */
-        0 0 45px #ff00ff,  /* Magenta wider secondary glow */
-        0 0 60px #ff00ff,  /* Magenta faint outer glow */
-        0 0 75px #ffffff;
+     ...
 }
+*/
 
 .navbar .nav-links {
     list-style: none;
@@ -333,10 +319,7 @@ body {
     flex-basis: 100%; /* Take full width when wrapped */
     text-align: center;
     margin-top: 10px; /* Add space when wrapped */
-    text-shadow: /* Simplified shadow for mobile */
-        0 0 3px #540a54,
-        0 0 6px #676ef8,
-        0 0 10px #a071f7;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* 移动端使用更细微的阴影 */
 }
 
 .navbar .nav-links {
@@ -386,11 +369,7 @@ body {
         margin-top: 0; /* Reset margin */
         text-align: center; /* Keep centered */
         flex-grow: 1; /* Allow it to grow again */
-         text-shadow: /* Restore some complexity */
-            0 0 4px #540a54,
-            0 0 8px #676ef8,
-            0 0 15px #a071f7,
-            0 0 20px #00ffff;
+         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* 同步基础样式 */
     }
 
     .navbar .nav-links {
@@ -469,14 +448,7 @@ body {
 
     .navbar .navbar-slogan {
         font-size: 3em; /* Full font size */
-         text-shadow: /* Full shadow effect */
-            0 0 5px #540a54,
-            0 0 10px #676ef8,
-            0 0 20px #a071f7,
-            0 0 30px #00ffff,
-            0 0 40px #00ffff,
-            0 0 55px #00ffff,
-            0 0 70px #ffffff;
+         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* 同步基础样式 */
     }
 
     .content {
