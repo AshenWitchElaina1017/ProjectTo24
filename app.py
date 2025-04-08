@@ -13,21 +13,23 @@ app = Flask(__name__)
 # 现在 load_dotenv() 执行后, os.environ 就能读取到 .env 中的变量了
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 DEEPSEEK_API_KEY = os.environ.get('DEEPSEEK_API_KEY') # ++ 新增：读取 DeepSeek Key ++
-
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY') # ++ 新增：读取 Gemini Key ++
 # --- 定义 API 配置 ---
 OPENAI_API_URL = 'https://api.ephone.chat/v1/chat/completions'
 OPENAI_MODEL_NAME = 'gpt-4o-mini-search-preview'
 
-# DEEPSEEK_API_URL = 'https://gala.chataiapi.com/v1/chat/completions' # ++ 修正：移除多余斜杠 ++
 DEEPSEEK_API_URL = 'https://ark.cn-beijing.volces.com/api/v3/chat/completions' # ++ 新增：DeepSeek API URL ++
 DEEPSEEK_MODEL_NAME = 'deepseek-v3-250324' # ++ 新增：DeepSeek 模型 ++
 
-
+GEMINI_API_URL = 'https://api.duck2api.com/v1/chat/completions' # ++ 新增：Gemini API URL ++
+GEMINI_MODEL_NAME = 'gemini-2.5-pro-exp-03-25-search' # ++ 新增：Gemini 模型 ++
 # --- 启动前检查 ---
 if not OPENAI_API_KEY:
     print("警告：未能从 .env 文件或环境变量中加载 OPENAI_API_KEY。默认 AI 将无法使用。")
 if not DEEPSEEK_API_KEY:
     print("警告：未能从 .env 文件或环境变量中加载 DEEPSEEK_API_KEY。DeepSeek AI 将无法使用。")
+if not GEMINI_API_KEY:
+    print("警告：未能从 .env 文件或环境变量中加载 GEMINI_API_KEY。Gemini AI 将无法使用。")
 # ---------------------------------------
 
 @app.route('/')
@@ -146,6 +148,11 @@ def handle_chat():
         api_key = DEEPSEEK_API_KEY
         model_name = DEEPSEEK_MODEL_NAME
         system_prompt = system_prompt_deepseek # 使用 DeepSeek 的提示
+    elif selected_agent == 'gemini': # ++ 新增：处理 Gemini 代理 ++
+        api_url = GEMINI_API_URL
+        api_key = GEMINI_API_KEY
+        model_name = GEMINI_MODEL_NAME
+        # system_prompt = system_prompt_default # 暂时复用默认提示
     else:
         return jsonify({'error': f'未知的 AI 代理: {selected_agent}'}), 400
 
