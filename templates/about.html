@@ -1,0 +1,54 @@
+{% extends "template.html" %}
+
+{% block title %}关于项目 - 二十四节气探索{% endblock %}
+
+{% block styles %}
+    {{ super() }} {# 继承父模板的样式块内容 #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <section id="about-project">
+        <h2>项目介绍</h2>
+        <p>本项目旨在通过互动的方式，帮助用户了解和学习中国传统的二十四节气文化。</p>
+
+        <h3>技术栈</h3>
+        <ul>
+            <li><strong>后端:</strong> Python (Flask)</li>
+            <li><strong>前端:</strong> HTML, CSS, JavaScript</li>
+            <li><strong>数据存储:</strong> JSON 文件</li>
+            <!-- 可以根据实际情况添加其他库或框架 -->
+        </ul>
+
+        <h3>AI 应用</h3>
+        <p>项目中集成了AI技术，例如：</p>
+        <ul>
+            <li><strong>智能问答:</strong> 在“节气问答”模块中，利用大语言模型 (LLM) 理解用户问题并提供相关的节气知识解答 (当前支持 ChatGPT, DeepSeek V3, Gemini 2.5 Pro)。</li>
+             <li><strong>个性化模式:</strong> AI 助手支持多种模式（聊天、猜节气、旅行推荐），提供更丰富的互动体验。</li>
+            <!-- 可以根据实际使用的AI技术进行补充 -->
+        </ul>
+
+         <h3>创新点</h3>
+        <ul>
+            <li><strong>互动体验:</strong> 通过记忆匹配游戏、诗词配对、AI问答等多种互动形式，提升学习趣味性。</li>
+            <li><strong>文化融合:</strong> 将传统文化与现代技术相结合，让古老的节气知识焕发新生。</li>
+            <li><strong>多 AI 模型集成:</strong> 提供不同 AI 模型的选择，用户可以体验不同模型的回答风格和能力。</li>
+            <li><strong>流式响应:</strong> AI 回答采用流式输出，提升用户体验。</li>
+        </ul>
+
+        <h3>应用点</h3>
+        <ul>
+            <li><strong>教育科普:</strong> 作为中小学或文化爱好者的节气知识学习工具。</li>
+            <li><strong>文化传播:</strong> 向更广泛的人群介绍和推广二十四节气文化。</li>
+            <li><strong>技术实践:</strong> 作为 Web 开发 (Flask)、前端交互和多 AI API 集成的实践案例。</li>
+        </ul>
+    </section>
+</main>
+{% endblock %}
+
+{# 如果 about 页面需要特定的 JS，可以在这里添加 #}
+{# {% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/about.js') }}"></script>
+{% endblock %} #}

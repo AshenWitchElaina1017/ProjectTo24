@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextQuestionBtn = document.getElementById('next-question-btn');
     let poemsData = [];
     let currentCorrectPoem = null;
-    const numberOfOptions = 4; 
+    const numberOfOptions = 4;
+    let currentInteractiveAudio = null; // 保存当前播放的互动语音实例
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -22,6 +23,24 @@ document.addEventListener('DOMContentLoaded', () => {
         shuffleArray(shuffled);
         return shuffled.slice(0, num);
     }
+    // --- 辅助函数：播放互动音频（带中断逻辑）---
+    function playAudio(filePath) {
+        // 如果有音频正在播放，则停止它
+        if (currentInteractiveAudio && !currentInteractiveAudio.paused) {
+            currentInteractiveAudio.pause();
+            currentInteractiveAudio.currentTime = 0; // 重置播放位置
+        }
+
+        // 创建新的音频实例并播放
+        const newAudio = new Audio(filePath);
+        newAudio.play().catch(error => {
+            console.error(`无法播放音频 "${filePath}":`, error);
+        });
+
+        // 更新当前播放的音频实例引用
+        currentInteractiveAudio = newAudio;
+    }
+
     async function loadPoems() {
         try {
             const response = await fetch('/static/data/poems.json');
@@ -72,10 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
         buttons.forEach(button => button.disabled = true);
         resultDisplay.style.display = 'block';
         if (selectedPoemText === currentCorrectPoem.poem) {
+            playAudio('/static/audio/太棒了！继续前进，感受四时变化吧！.wav'); // 播放成功语音
             resultMessage.textContent = '正确！ 🎉';
             resultDisplay.classList.add('correct');
             correctPoemInfo.style.display = 'none';
         } else {
+            playAudio('/static/audio/哎呀，好像有点偏差。没关系，看看提示或者再试一次？.wav'); // 播放失败语音
             resultMessage.textContent = '错误。😟 正确的诗词是：';
             resultDisplay.classList.add('incorrect');
             correctPoemTitle.textContent = `《${currentCorrectPoem.title}》`;

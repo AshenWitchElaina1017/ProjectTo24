@@ -1,0 +1,97 @@
+/* static/css/about.css */
+
+#about-project {
+    background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px; /* 限制最大宽度 */
+    margin: 40px auto; /* 上下边距40px，左右自动居中 */
+    line-height: 1.8; /* 增加行高，提高可读性 */
+    color: #333; /* 深灰色文字 */
+}
+
+#about-project h2 {
+    color: #006400; /* 深绿色标题 */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2em; /* 增大标题字号 */
+    border-bottom: 2px solid #90EE90; /* 浅绿色下划线 */
+    padding-bottom: 10px;
+}
+
+#about-project h3 {
+    color: #2E8B57; /* 海绿色子标题 */
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.6em; /* 增大子标题字号 */
+    position: relative; /* 用于添加装饰性元素 */
+    padding-left: 15px; /* 左侧留出空间 */
+}
+
+/* 为 h3 添加装饰性竖线 */
+#about-project h3::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 5px; /* 调整竖线位置 */
+    bottom: 5px;
+    width: 4px;
+    background-color: #90EE90; /* 浅绿色 */
+    border-radius: 2px;
+}
+
+
+#about-project p {
+    margin-bottom: 20px;
+    font-size: 1.1em; /* 增大段落字号 */
+}
+
+#about-project ul {
+    list-style: none; /* 移除默认列表样式 */
+    padding-left: 20px; /* 左侧内边距 */
+    margin-bottom: 25px;
+}
+
+#about-project ul li {
+    margin-bottom: 12px;
+    position: relative; /* 用于自定义列表标记 */
+    padding-left: 25px; /* 为自定义标记留出空间 */
+    font-size: 1.1em;
+}
+
+/* 自定义列表项标记 */
+#about-project ul li::before {
+    content: '❖'; /* 使用菱形符号 */
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #3CB371; /* 中海绿色 */
+    font-size: 1.2em; /* 调整标记大小 */
+}
+
+
+#about-project strong {
+    color: #008000; /* 绿色强调文字 */
+}
+
+/* 响应式设计：小屏幕调整 */
+@media (max-width: 768px) {
+    #about-project {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    #about-project h2 {
+        font-size: 1.8em;
+    }
+
+    #about-project h3 {
+        font-size: 1.4em;
+    }
+
+     #about-project p,
+    #about-project ul li {
+        font-size: 1em;
+    }
+}

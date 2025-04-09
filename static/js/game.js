@@ -25,6 +25,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let timerInterval = null;   // 保存计时器的 interval ID
     let secondsElapsed = 0;     // 记录经过的秒数
     let popupTimeout = null;    // 保存信息弹窗的 timeout ID
+    let currentInteractiveAudio = null; // 保存当前播放的互动语音实例
+
+    // --- 辅助函数：播放互动音频（带中断逻辑）---
+    function playAudio(filePath) {
+        // 如果有音频正在播放，则停止它
+        if (currentInteractiveAudio && !currentInteractiveAudio.paused) {
+            currentInteractiveAudio.pause();
+            currentInteractiveAudio.currentTime = 0; // 重置播放位置
+        }
+
+        // 创建新的音频实例并播放
+        const newAudio = new Audio(filePath);
+        newAudio.play().catch(error => {
+            console.error(`无法播放音频 "${filePath}":`, error);
+        });
+
+        // 更新当前播放的音频实例引用
+        currentInteractiveAudio = newAudio;
+
+        // （可选）监听播放结束事件，清除引用
+        // currentInteractiveAudio.onended = () => {
+        //     currentInteractiveAudio = null;
+        // };
+    }
 
     // --- 辅助函数：格式化时间（秒 转 MM:SS）---
     function formatTime(totalSeconds) {
@@ -250,10 +274,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMatch = firstCard.dataset.matchId === secondCard.dataset.matchId;
 
         if (isMatch) {
+            playAudio('/static/audio/太棒了！继续前进，感受四时变化吧！.wav'); // 播放成功语音
             showMatchInfo(firstCard); // 显示匹配节气的信息弹窗
             // 使用 setTimeout 以便在禁用卡牌前显示弹窗
             setTimeout(disableCards, 600); // 短暂延迟后禁用卡牌
         } else {
+            playAudio('/static/audio/哎呀，好像有点偏差。没关系，看看提示或者再试一次？.wav'); // 播放失败语音
             unflipCards(); // 如果不匹配则翻回卡牌
         }
     }
@@ -311,6 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 处理游戏胜利条件
     function winGame() {
+        playAudio('/static/audio/恭喜通关！你已掌握二十四节气的奥秘！.wav'); // 播放胜利语音
         console.log("游戏胜利!");
         stopTimer(); // 停止游戏计时器
 

@@ -55,6 +55,10 @@ def qa_iframe():
 @app.route('/song')
 def song():
     return render_template('song.html')
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 
 # +++ API 路由来处理聊天请求 (修改以支持多代理) +++
 @app.route('/api/chat', methods=['POST'])
@@ -66,12 +70,13 @@ def handle_chat():
 
     user_question = data['question']
     selected_agent = data.get('ai_agent', 'default')
+    selected_mode = data.get('mode', 'chat') # 新增：获取模式，默认为 'chat'
 
     # 2. 根据选择的代理确定 API 配置
     api_url = None
     api_key = None
     model_name = None
-    # --- 系统提示保持不变，这里省略以减少篇幅 ---
+    # --- 定义所有 System Prompts ---
     # 注意：实际代码中应保留完整的 system_prompt 字符串
     system_prompt_default = '''
         # 中国传统二十四节气专家指南
@@ -137,8 +142,32 @@ def handle_chat():
         ## 回应要求
         当被问及特定节气时，应包含其天文依据、气候特点、农事活动、民俗文化和养生建议等全面信息，既有科学解释，又有文化传承视角。
     '''
-    system_prompt = system_prompt_default # 默认使用 default 的提示
+    system_prompt_guess = '''
+# 节气猜测专家
 
+你现在扮演一个“节气猜测”专家。你的任务是：
+1.  仔细分析用户提供的关于天气、物候（植物、动物活动）、农事活动、特定感受或习俗的描述。
+2.  根据这些描述，猜测最符合的中国传统二十四节气是哪一个。
+3.  在回答时，直接给出你猜测的节气名称，并简要说明你的猜测依据（例如：“根据您描述的‘天气渐冷，偶有霜降’，我猜测是【霜降】节气，因为这个时节气温下降明显，开始出现霜冻现象。”）。
+4.  如果信息不足以明确判断，可以请求用户提供更多线索，或者给出几个可能性最大的节气并说明理由。
+5.  保持互动性和趣味性。
+'''
+    system_prompt_recommend = '''
+# 节气与旅行推荐专家
+
+你现在扮演一个结合了“节气知识”和“旅行推荐”的专家。你的任务是：
+1.  理解用户描述的个人爱好、兴趣或偏好（例如：喜欢登山、摄影、美食、安静的地方、热闹的民俗活动等）。
+2.  根据用户的爱好，为其推荐一个或几个最相关的中国传统二十四节气。说明为什么这个节气适合用户的爱好（例如：气候宜人、有特定自然景观、有相关民俗活动等）。
+3.  为推荐的每个节气，提供 1-2 个具体的、适合该节气和用户爱好的国内旅游地点建议。
+4.  简要介绍推荐地点的特色以及为什么它在那个节气时值得一游。
+5.  回答应包含节气名称、推荐理由、地点名称和地点特色。
+6.  例如：“如果您喜欢摄影和金黄色的稻田，我推荐【秋分】节气。此时全国大部分地区秋高气爽，稻谷成熟，是拍摄丰收景象的好时机。推荐地点：广西龙脊梯田，秋分时节层层叠叠的梯田一片金黄，光影效果绝佳。”
+'''
+    # --- 根据 mode 选择 System Prompt ---
+    system_prompt = None # 初始化 system_prompt
+
+
+    # 首先确定 API 配置
     if selected_agent == 'default':
         api_url = OPENAI_API_URL
         api_key = OPENAI_API_KEY
@@ -147,14 +176,31 @@ def handle_chat():
         api_url = DEEPSEEK_API_URL
         api_key = DEEPSEEK_API_KEY
         model_name = DEEPSEEK_MODEL_NAME
-        system_prompt = system_prompt_deepseek # 使用 DeepSeek 的提示
     elif selected_agent == 'gemini': # ++ 新增：处理 Gemini 代理 ++
         api_url = GEMINI_API_URL
         api_key = GEMINI_API_KEY
         model_name = GEMINI_MODEL_NAME
-        # system_prompt = system_prompt_default # 暂时复用默认提示
     else:
         return jsonify({'error': f'未知的 AI 代理: {selected_agent}'}), 400
+
+    # 然后根据 mode 选择 System Prompt
+    if selected_mode == 'chat':
+        # 根据 agent 选择 chat 模式的 prompt
+        if selected_agent == 'deepseek':
+             system_prompt = system_prompt_deepseek
+        else: # default 和 gemini (暂时) 都用 default prompt
+             system_prompt = system_prompt_default
+    elif selected_mode == 'guess':
+        system_prompt = system_prompt_guess
+    elif selected_mode == 'recommend':
+        system_prompt = system_prompt_recommend
+    else:
+        # 如果 mode 无效，默认 chat
+        print(f"警告：接收到未知的模式 '{selected_mode}'，将使用默认聊天模式。")
+        if selected_agent == 'deepseek':
+             system_prompt = system_prompt_deepseek
+        else:
+             system_prompt = system_prompt_default
 
     # 检查 API Key 是否存在
     if not api_key:
@@ -173,7 +219,7 @@ def handle_chat():
     payload = {
         'model': model_name,
         'messages': [
-            {'role': 'system', 'content': system_prompt},
+            {'role': 'system', 'content': system_prompt}, # 使用选择好的 prompt
             {'role': 'user', 'content': user_question}
         ],
         'stream': True # ++ 修改：启用流式传输 ++

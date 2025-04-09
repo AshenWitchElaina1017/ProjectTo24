@@ -27,6 +27,7 @@
             <li><a href="{{ url_for('game') }}" class="{{ 'active' if request.endpoint == 'game' else '' }}">记忆匹配</a></li>
             <li><a href="{{ url_for('song') }}" class="{{ 'active' if request.endpoint == 'song' else '' }}">诗词配对</a></li>
             <li><a href="{{ url_for('qa') }}" class="{{ 'active' if request.endpoint == 'qa' else '' }}">AI问答</a></li>
+            <li><a href="{{ url_for('about') }}" class="{{ 'active' if request.endpoint == 'about' else '' }}">关于项目</a></li>
         </ul>
     </nav>
     <div class="container">

@@ -1,4 +1,4 @@
-{% extends "template.html" %}
+<![CDATA[{% extends "template.html" %}
 
 {% block title %}
 二十四节气 - 智能问答
@@ -10,10 +10,22 @@
 
 {% block content %}
 <div class="chat-container">
+    {# 背景音乐播放器 #}
+    <audio id="bg-music" loop autoplay>
+        <source src="{{ url_for('static', filename='audio/bg_music.mp3') }}" type="audio/mpeg">
+        您的浏览器不支持 audio 元素。
+    </audio>
     {# 聊天窗口顶部标题 #}
     <div class="chat-header">
         <h4>节气小助手 💬</h4>
-        <button id="clear-chat-button" class="qa-button clear-button" title="清空消息记录">🗑️ 清空</button>
+        {# ++ 新增：包裹按钮的容器 ++ #}
+        <div class="header-buttons">
+             <button id="music-toggle-btn" class="qa-button music-toggle-btn"> {# ++ 移动到此处，并调整类名 ++ #}
+                <span class="play-icon">▶️</span>
+                <span class="pause-icon" style="display: none;">⏸️</span>
+             </button>
+             <button id="clear-chat-button" class="qa-button clear-button" title="清空消息记录">🗑️ 清空</button>
+        </div>
     </div>
 
     {# 聊天记录显示区域 #}
@@ -21,15 +33,32 @@
         {# 初始 AI 消息会由 JS 添加 #}
     </div>
 
-    {# AI 代理选择器 #}
-    <div class="agent-selector">
-        <label for="ai-agent-select">选择AI助手:</label>
-        <select id="ai-agent-select" name="ai_agent">
-            <option value="default" selected>ChatGPT 助手 (默认)</option>
-            <option value="deepseek">DeepSeek 助手</option>
-            <option value="gemini">Gemini 助手</option> {# ++ 新增：Gemini 选项 ++ #}
-        </select>
+    {# ++ 修改：将 AI 选择器和模式选择器包裹在一个容器中 ++ #}
+    <div class="selectors-container">
+        {# AI 代理选择器 #}
+        <div class="agent-selector">
+            <label for="ai-agent-select">选择助手:</label> {# 稍微缩短标签文本 #}
+            <select id="ai-agent-select" name="ai_agent">
+                <option value="default" selected>ChatGPT (默认)</option> {# 缩短选项文本 #}
+                <option value="deepseek">DeepSeek</option>
+                <option value="gemini">Gemini</option>
+            </select>
+        </div>
+
+        {# 模式选择器 #}
+        <div class="mode-selector">
+            <label>选择模式:</label>
+            <div class="mode-options">
+                <input type="radio" id="mode-chat" name="chat_mode" value="chat" checked>
+                <label for="mode-chat">聊天</label> {# 缩短标签文本 #}
+                <input type="radio" id="mode-guess" name="chat_mode" value="guess">
+                <label for="mode-guess">猜节气</label>
+                <input type="radio" id="mode-recommend" name="chat_mode" value="recommend">
+                <label for="mode-recommend">推荐</label>
+            </div>
+        </div>
     </div>
+    {# ++++++++++++++++++++++++++++++++++++++++++++++++++++++ #}
 
     {# 输入区域和表单 #}
     <form id="qa-form" class="chat-form">
@@ -49,6 +78,26 @@
         <button type="button" class="prompt-chip">秋分的气候特点</button>
     </div>
 </div>
+
+    <div class="info-panel">
+        <h4>可用助手和模式</h4>
+        <div class="ai-info">
+            <h5><i class="fas fa-robot"></i> 助手:</h5>
+            <ul>
+                <li><strong>ChatGPT (默认):</strong> 通用聊天和问答。</li>
+                <li><strong>DeepSeek:</strong> 深度信息检索和分析。</li>
+                <li><strong>Gemini:</strong> Google 的大型语言模型。</li>
+            </ul>
+        </div>
+        <div class="mode-info">
+            <h5><i class="fas fa-sliders-h"></i> 模式:</h5>
+            <ul>
+                <li><strong>聊天:</strong> 关于二十四节气的自由对话。</li>
+                <li><strong>猜节气:</strong> 根据提示猜测对应的节气。</li>
+                <li><strong>推荐:</strong> 推荐节气相关活动或内容。</li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
@@ -57,4 +106,4 @@
     <script src="{{ url_for('static', filename='js/purify.min.js') }}"></script>
     {# +++++++++++++++++++++++++++++++ #}
     <script src="{{ url_for('static', filename='js/qa.js') }}"></script>
-{% endblock %}
+{% endblock %}]]>

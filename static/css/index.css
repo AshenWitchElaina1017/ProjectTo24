@@ -304,6 +304,41 @@
     }
 }
 
+/* --- Background Music Button Styles --- */
+.music-btn {
+    position: fixed; /* 固定在视口 */
+    bottom: 30px;
+    left: 30px; /* 改为左下角 */
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); /* 粉嫩渐变 */
+    border: none;
+    border-radius: 50%; /* 圆形按钮 */
+    color: white;
+    font-size: 28px; /* 图标大小 */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(255, 154, 158, 0.5); /* 匹配渐变色的阴影 */
+    transition: all 0.3s ease;
+    z-index: 1000; /* 确保在最上层 */
+}
+
+.music-btn:hover {
+    transform: scale(1.1); /* 悬停放大 */
+    box-shadow: 0 6px 16px rgba(255, 154, 158, 0.7);
+}
+
+.music-btn:active {
+    transform: scale(0.95); /* 点击缩小 */
+    box-shadow: 0 2px 8px rgba(255, 154, 158, 0.4);
+}
+
+.music-btn .pause-icon {
+    display: none; /* 默认隐藏暂停图标 */
+}
+
 @media (max-width: 480px) {
     .carousel-container {
         height: 250px;

@@ -254,4 +254,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 初始加载 ---
     loadSolarTermData(); // 通过加载数据开始流程
 
+    // --- 背景音乐控制 ---
+    const bgMusic = document.getElementById('bg-music');
+    const musicToggleBtn = document.getElementById('music-toggle-btn');
+    const playIcon = musicToggleBtn.querySelector('.play-icon');
+    const pauseIcon = musicToggleBtn.querySelector('.pause-icon');
+
+    if (bgMusic && musicToggleBtn && playIcon && pauseIcon) {
+        musicToggleBtn.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(error => {
+                    console.error("音乐播放失败:", error);
+                    // 可以在这里给用户一些反馈，例如按钮短暂变红
+                });
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'inline'; // 或 'block'
+            } else {
+                bgMusic.pause();
+                playIcon.style.display = 'inline'; // 或 'block'
+                pauseIcon.style.display = 'none';
+            }
+        });
+
+        // 启用自动播放 (注意：可能被浏览器策略阻止)
+        bgMusic.play().then(() => {
+             // 自动播放成功，更新按钮状态
+             playIcon.style.display = 'none';
+             pauseIcon.style.display = 'inline';
+        }).catch(error => {
+            console.log("自动播放被阻止或失败:", error);
+            // 自动播放失败，保持播放按钮可见
+            playIcon.style.display = 'inline';
+            pauseIcon.style.display = 'none';
+        });
+    } else {
+        console.warn("未能找到背景音乐控制所需的部分或全部元素。");
+    }
+
 }); // DOMContentLoaded 结束

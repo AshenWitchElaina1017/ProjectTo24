@@ -191,6 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const selectedAgent = aiAgentSelect ? aiAgentSelect.value : 'default';
+            // +++ 新增：获取选定的模式 +++
+            const selectedModeInput = document.querySelector('input[name="chat_mode"]:checked');
+            const selectedMode = selectedModeInput ? selectedModeInput.value : 'chat'; // 默认为 'chat'
+            // ++++++++++++++++++++++++++
 
             // ++ 修改：发送请求并处理流式响应 ++
             const response = await fetch('/api/chat', {
@@ -199,7 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json',
                     'Accept': 'text/event-stream' // 明确要求 SSE
                 },
-                body: JSON.stringify({ question: question, ai_agent: selectedAgent }),
+                // +++ 修改：在请求体中包含模式 +++
+                body: JSON.stringify({ question: question, ai_agent: selectedAgent, mode: selectedMode }),
             });
 
             // 检查初始响应是否 OK 且有 body
@@ -422,5 +427,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-}); // DOMContentLoaded 监听器结束
+    // --- 背景音乐控制 ---
+    const bgMusic = document.getElementById('bg-music');
+    const musicToggleBtn = document.getElementById('music-toggle-btn');
+    const playIcon = musicToggleBtn ? musicToggleBtn.querySelector('.play-icon') : null;
+    const pauseIcon = musicToggleBtn ? musicToggleBtn.querySelector('.pause-icon') : null;
 
+    if (bgMusic && musicToggleBtn && playIcon && pauseIcon) {
+        musicToggleBtn.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(error => {
+                    console.error("音乐播放失败:", error);
+                    // 可以在这里给用户一些反馈
+                });
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'inline'; // 或 'block'
+            } else {
+                bgMusic.pause();
+                playIcon.style.display = 'inline'; // 或 'block'
+                pauseIcon.style.display = 'none';
+            }
+        });
+
+        // 尝试自动播放并更新按钮状态
+        bgMusic.play().then(() => {
+             // 自动播放成功
+             playIcon.style.display = 'none';
+             pauseIcon.style.display = 'inline';
+        }).catch(error => {
+            console.log("音乐自动播放被阻止或失败 (qa.js):", error);
+            // 自动播放失败，保持播放按钮可见
+            playIcon.style.display = 'inline';
+            pauseIcon.style.display = 'none';
+        });
+    } else {
+        console.warn("未能找到 QA 页面背景音乐控制所需的部分或全部元素。");
+        // 检查具体哪个元素未找到
+        if (!bgMusic) console.warn("元素 'bg-music' 未找到。");
+        if (!musicToggleBtn) console.warn("元素 'music-toggle-btn' 未找到。");
+        if (!playIcon) console.warn("元素 '.play-icon' 未找到。");
+        if (!pauseIcon) console.warn("元素 '.pause-icon' 未找到。");
+    }
+
+}); // DOMContentLoaded 监听器结束

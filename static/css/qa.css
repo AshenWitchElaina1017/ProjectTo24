@@ -11,6 +11,7 @@
     min-height: 400px;
     font-family: 'M PLUS Rounded 1c', sans-serif;
     overflow: hidden;
+    position: relative; /* ++ 新增：为绝对定位的子元素提供参照 ++ */
 }
 
 /* --- Chat Header Styles --- */
@@ -240,6 +241,159 @@
     cursor: default;
 }
 
+/* --- 页眉按钮容器样式 --- */
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 按钮之间的间距 */
+}
+
+/* --- 音乐切换按钮样式 (现在在页眉内) --- */
+.music-toggle-btn { /* 使用类选择器，因为 ID 可能在其他地方使用 */
+    width: 32px; /* 调整大小以适应页眉 */
+    height: 32px;
+    padding: 0;
+    border-radius: 50%; /* 保持圆形 */
+    background-color: #e9eaf0; /* 浅灰色背景 */
+    border: 1px solid #d1d3d8;
+    color: #555; /* 图标颜色 */
+    /* 继承 .qa-button 的 flex 属性进行居中 */
+}
+
+.music-toggle-btn:hover {
+    background-color: #d1d3d8; /* 悬停时变深 */
+    border-color: #b0b3b8;
+}
+
+.music-toggle-btn .play-icon,
+.music-toggle-btn .pause-icon {
+    font-size: 16px; /* 调整图标大小 */
+    line-height: 1;
+}
+
+/* --- 调整清空按钮样式以匹配 --- */
+.clear-button {
+    /* 可能需要微调 padding 或 height 使其与圆形按钮垂直对齐更好 */
+    /* 例如，可以稍微减少 padding 或设置固定高度 */
+    height: 32px; /* 使其与音乐按钮高度一致 */
+    padding: 0 10px; /* 调整内边距 */
+    /* 其他样式保持不变 */
+}
+
+/* --- New Styles for Selectors Container and Anime Theme --- */
+
+/* Container for both selectors */
+.selectors-container {
+    display: flex;
+    justify-content: space-between; /* Puts agent selector left, mode selector right */
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f0f8ff; /* AliceBlue - a soft, light blue */
+    border-top: 1px solid #e0f0ff;
+    border-bottom: 1px solid #e0f0ff;
+    flex-shrink: 0; /* Prevent shrinking */
+    gap: 20px; /* Add some space between the two selectors if needed */
+}
+
+/* Style for individual selector groups */
+.agent-selector, .mode-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between label and control */
+}
+
+/* Style for labels within the container */
+.selectors-container label {
+    font-size: 0.9em;
+    color: #6a7a8a; /* Slightly desaturated blue/gray */
+    font-weight: 500;
+    margin-bottom: 0; /* Override potential browser defaults */
+}
+
+/* Style for the AI Agent Select Dropdown */
+#ai-agent-select {
+    padding: 6px 10px;
+    border: 1px solid #cce0ff; /* Light pastel blue border */
+    border-radius: 15px; /* Rounded corners */
+    background-color: #ffffff;
+    font-size: 0.9em;
+    color: #334455;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    appearance: none; /* Basic reset */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* Custom dropdown arrow (pastel blue) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2388aaff' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px; /* Make space for the arrow */
+    cursor: pointer;
+    min-width: 150px; /* Give it some base width */
+}
+
+#ai-agent-select:hover {
+    border-color: #a8c7fa; /* Slightly darker blue on hover */
+}
+
+#ai-agent-select:focus {
+    outline: none;
+    border-color: #88aaff; /* Focus blue */
+    box-shadow: 0 0 0 2px rgba(136, 170, 255, 0.3); /* Focus ring */
+}
+
+/* Style for the Mode Options group */
+.mode-options {
+    display: flex;
+    gap: 5px; /* Space between mode 'buttons' */
+    background-color: #e6f0fa; /* Background for the button group */
+    border-radius: 15px; /* Rounded container */
+    padding: 4px; /* Inner padding */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
+}
+
+/* Hide the actual radio button */
+.mode-options input[type="radio"] {
+    display: none;
+}
+
+/* Style the labels to look like buttons */
+.mode-options label {
+    padding: 5px 12px;
+    border-radius: 12px; /* Rounded labels */
+    background-color: transparent; /* Default transparent */
+    color: #6a7a8a; /* Match label color */
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+    margin: 0; /* Reset margins */
+    display: inline-block;
+    border: 1px solid transparent; /* Placeholder for border */
+}
+
+/* Style for the selected mode's label */
+.mode-options input[type="radio"]:checked + label {
+    background-color: #ffffff; /* White background for selected */
+    color: #3a7bd5; /* Theme blue for text */
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for selected */
+    border: 1px solid #ffffff;
+}
+
+/* Hover effect for non-selected labels */
+.mode-options label:hover {
+    background-color: rgba(255, 255, 255, 0.7); /* Slight highlight on hover */
+    color: #4a5a6a;
+}
+
+/* Keep selected style on hover */
+.mode-options input[type="radio"]:checked + label:hover {
+     background-color: #ffffff;
+     color: #3a7bd5;
+}
+/* --- End of New Styles --- */
+
 /* --- Clear Button Specific Styles --- */
 .clear-button {
     background-color: #f8d7da; /* Light red background */
@@ -259,4 +413,92 @@
 
 .clear-button:active {
     transform: scale(0.97); /* Slightly different active scale */
+}
+
+/* --- Info Panel Styles (Bottom Right) --- */
+.info-panel {
+    position: absolute; /* Position relative to .chat-container */
+    bottom: 20px;
+    right: 20px;
+    width: 250px; /* Adjust width as needed */
+    background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    border: 1px solid #e8e8e8;
+    font-size: 0.85em;
+    z-index: 10; /* Ensure it's above chat log but below modals if any */
+    max-height: calc(75vh - 150px); /* Limit height relative to viewport height minus header/footer */
+    overflow-y: auto; /* Add scroll if content overflows */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0.9; /* Slightly transparent by default */
+}
+
+.info-panel:hover {
+    opacity: 1; /* Fully opaque on hover */
+}
+
+.info-panel h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #2c5d87;
+    font-size: 1.1em;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.info-panel h5 {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    color: #3a7bd5;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.info-panel h5 i { /* Style for Font Awesome icons if used */
+    font-size: 0.9em;
+}
+
+.info-panel ul {
+    list-style: none;
+    padding-left: 10px;
+    margin: 0;
+}
+
+.info-panel li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+    color: #555;
+}
+
+.info-panel li strong {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 900px) { /* Adjust breakpoint if needed */
+    .info-panel {
+        width: 200px;
+        font-size: 0.8em;
+        bottom: 15px;
+        right: 15px;
+        padding: 10px;
+    }
+    .info-panel h4 {
+        font-size: 1em;
+        margin-bottom: 10px;
+    }
+    .info-panel h5 {
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: 600px) {
+     .info-panel {
+        display: none; /* Hide panel on very small screens */
+     }
 }
