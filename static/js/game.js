@@ -3,10 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameBoard = document.getElementById('game-board');
     const movesCountSpan = document.getElementById('moves-count');
     const timerSpan = document.getElementById('timer');
+    const scoreSpan = document.getElementById('score'); // 新增：获取积分显示元素
     const restartButton = document.getElementById('restart-button');
     const winMessageDiv = document.getElementById('win-message');
     const finalMovesSpan = document.getElementById('final-moves');
     const finalTimeSpan = document.getElementById('final-time');
+    const finalScoreSpan = document.getElementById('final-score'); // 新增：获取最终得分显示元素
     const playAgainButton = document.getElementById('play-again-button');
     const matchInfoPopup = document.getElementById('match-info-popup');
     const popupTermName = document.getElementById('popup-term-name');
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let timerInterval = null;   // 保存计时器的 interval ID
     let secondsElapsed = 0;     // 记录经过的秒数
     let popupTimeout = null;    // 保存信息弹窗的 timeout ID
+    let score = 0;              // 新增：记录玩家得分
     let currentInteractiveAudio = null; // 保存当前播放的互动语音实例
 
     // --- 辅助函数：播放互动音频（带中断逻辑）---
@@ -74,7 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 辅助函数：计算布局的网格列数 ---
     function calculateGridColumns(totalCards) {
-        if (totalCards <= 9) return 3;
+        if (totalCards === 8) return 4; // 4 对 (8 cards) -> 4x2 grid
+        if (totalCards <= 9) return 3; // Keep 3 for other small numbers if needed
         if (totalCards <= 12) return 4; // 6 对
         if (totalCards <= 16) return 4; // 8 对
         if (totalCards <= 20) return 5;
@@ -110,12 +114,14 @@ document.addEventListener('DOMContentLoaded', () => {
         moves = 0;
         matchedPairs = 0;
         secondsElapsed = 0;
+        score = 0; // 新增：重置积分
         firstCard = null;
         secondCard = null;
         lockBoard = false;
         stopTimer(); // 停止计时器
         timerSpan.textContent = formatTime(secondsElapsed); // 重置计时器显示
         movesCountSpan.textContent = moves; // 重置步数显示
+        scoreSpan.textContent = score; // 新增：重置积分显示
 
         // 重置 UI 元素
         gameBoard.innerHTML = '<p class="loading-message">正在选择节气...</p>'; // 显示加载中
@@ -163,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 设置带卡牌的游戏棋盘
     function setupBoard() {
         console.log(`设置棋盘，难度: ${totalPairs} 对`);
+        playAudio('/static/audio/欢迎来到二十四节气记忆挑战！看看你的眼力和记性如何？.wav'); // ++ 新增：游戏开始语音 ++
         // 1. 根据难度选择随机节气
         const selectedTerms = getRandomTerms(allSolarTerms, totalPairs);
 
@@ -274,12 +281,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMatch = firstCard.dataset.matchId === secondCard.dataset.matchId;
 
         if (isMatch) {
-            playAudio('/static/audio/太棒了！继续前进，感受四时变化吧！.wav'); // 播放成功语音
+            // ++ 修改：随机播放成功语音 ++
+            const successAudios = [
+                '/static/audio/太棒了！继续前进，感受四时变化吧！.wav',
+                '/static/audio/这个节气的知识掌握得不错！.wav'
+            ];
+            playAudio(successAudios[Math.floor(Math.random() * successAudios.length)]);
             showMatchInfo(firstCard); // 显示匹配节气的信息弹窗
             // 使用 setTimeout 以便在禁用卡牌前显示弹窗
             setTimeout(disableCards, 600); // 短暂延迟后禁用卡牌
         } else {
-            playAudio('/static/audio/哎呀，好像有点偏差。没关系，看看提示或者再试一次？.wav'); // 播放失败语音
+            // ++ 修改：随机播放失败语音 ++
+             const failAudios = [
+                '/static/audio/哎呀，好像有点偏差。没关系，看看提示或者再试一次？.wav',
+                '/static/audio/嗯，这个答案很接近了，再想想？.wav'
+            ];
+            playAudio(failAudios[Math.floor(Math.random() * failAudios.length)]);
+            score -= 2; // 新增：选择错误扣 2 分
+            if (score < 0) { score = 0; } // 新增：确保分数不为负
+            scoreSpan.textContent = score; // 新增：更新积分显示
+            // ++ 新增：当分数过低时播放提示音 ++
+            if (score < 5) { // 设定阈值为 5
+                playAudio('/static/audio/哎呀，好像有点偏差。没关系，看看提示或者再试一次？.wav');
+            }
             unflipCards(); // 如果不匹配则翻回卡牌
         }
     }
@@ -312,8 +336,17 @@ document.addEventListener('DOMContentLoaded', () => {
         secondCard.classList.add('matched');
 
         matchedPairs++; // 增加匹配对计数
-        resetBoardState(); // 为下一轮重置状态
+        score += 10; // 新增：每次匹配成功加 10 分
+        scoreSpan.textContent = score; // 新增：更新积分显示
 
+        // ++ 新增：检查游戏进度并播放相应语音 ++
+        if (matchedPairs === Math.ceil(totalPairs / 2)) { // 到达一半
+            playAudio('/static/audio/干得不错，已经完成一半了！继续加油！.wav');
+        } else if (matchedPairs === totalPairs - 1 && totalPairs > 1) { // 只剩最后一对 (且总数大于1)
+             playAudio('/static/audio/胜利在望！找到它们，完成挑战！.wav');
+        }
+
+        resetBoardState(); // 为下一轮重置状态
         // 检查是否所有对都已找到
         if (matchedPairs === totalPairs) {
             winGame();
@@ -337,7 +370,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 处理游戏胜利条件
     function winGame() {
-        playAudio('/static/audio/恭喜通关！你已掌握二十四节气的奥秘！.wav'); // 播放胜利语音
+        playAudio('/static/audio/恭喜通关！你已掌握二十四节气的奥秘！.wav'); // 播放主要胜利语音
+        // -- 移除：后续补充胜利语音，避免相互打断 --
+        // setTimeout(() => playAudio('/static/audio/恭喜你完成了挑战！你对二十四节气的了解又加深了呢！.wav'), 1500);
+        // setTimeout(() => playAudio('/static/audio/时间流转，四季轮回，这次节气之旅感觉如何？.wav'), 3500);
+        // setTimeout(() => playAudio('/static/audio/虽然挑战结束了，但探索节气智慧的旅程永不停止。.wav'), 5500);
+
         console.log("游戏胜利!");
         stopTimer(); // 停止游戏计时器
 
@@ -348,6 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
         finalDifficultySpan.textContent = difficultyText; // 显示难度级别
         finalMovesSpan.textContent = moves;
         finalTimeSpan.textContent = formatTime(secondsElapsed);
+        finalScoreSpan.textContent = score; // 新增：显示最终得分
         winMessageDiv.classList.remove('hidden');
 
         // 确保显示胜利信息时隐藏信息弹窗

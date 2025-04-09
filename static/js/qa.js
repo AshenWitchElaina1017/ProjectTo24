@@ -9,6 +9,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const promptChips = document.querySelectorAll('.prompt-chip');
     const aiAgentSelect = document.getElementById('ai-agent-select'); // ++ 新增：获取 AI 代理选择器 ++
     const clearChatButton = document.getElementById('clear-chat-button'); // ++ 新增：获取清空按钮 ++
+    let currentInteractiveAudio = null; // ++ 新增：保存当前播放的互动语音实例 ++
+
+    // --- 辅助函数：播放互动音频（带中断逻辑）---
+    function playAudio(filePath) {
+        // 如果有音频正在播放，则停止它
+        if (currentInteractiveAudio && !currentInteractiveAudio.paused) {
+            currentInteractiveAudio.pause();
+            currentInteractiveAudio.currentTime = 0; // 重置播放位置
+        }
+
+        // 创建新的音频实例并播放
+        const newAudio = new Audio(filePath);
+        newAudio.play().catch(error => {
+            console.error(`无法播放音频 "${filePath}":`, error);
+        });
+
+        // 更新当前播放的音频实例引用
+        currentInteractiveAudio = newAudio;
+    }
+
     // --- 辅助函数：添加消息气泡 ---
     function addMessage(sender, text, options = {}) {
         const messageDiv = document.createElement('div');
@@ -117,6 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialGreeting = '你好！我是二十四节气小助手，你有什么关于节气的问题想问我吗？';
     // 假设初始问候语不是 Markdown
     addMessage('ai', initialGreeting);
+    // ++ 修改：仅在顶层窗口（非 iframe）播放初始问候语音 ++
+    if (window.self === window.top) {
+        playAudio('/static/audio/你好！我是二十四节气小助手，你有什么关于节气的问题想问我吗？.wav');
+    }
 
     // --- Textarea 输入事件监听器（用于自动调整大小）---
     userQuestionInput.addEventListener('input', autoResizeTextarea);
@@ -154,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ++ 新增：添加“正在思考中”提示 ++
         thinkingIndicator = addMessage('ai', '正在思考中...', { isThinking: true }); // ++ 赋值给已声明的变量 ++
+        playAudio('/static/audio/让我想一想....wav'); // ++ 新增：播放思考中语音 ++
 
 
         // ++ 创建一个空的 AI 消息气泡用于流式更新 (将在 fetch 成功后使用) ++
@@ -230,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 thinkingIndicator = null; // 清除引用
             }
             aiMessageDiv = addMessage('ai', '', { isStreaming: true }); // 在这里创建流式气泡
+            // playAudio('/static/audio/找到了！请看....wav'); // -- 移除：开始回答语音，由打字机效果代替提示 --
             // ++ 在创建 aiMessageDiv 后创建并附加 span ++
             typingContentSpan = document.createElement('span'); // 创建用于打字的元素
             aiMessageDiv.appendChild(typingContentSpan);
@@ -331,6 +357,8 @@ document.addEventListener('DOMContentLoaded', () => {
                      aiMessageDiv.textContent = accumulatedAnswer; // Fallback to plain text
                 }
             }
+            // ++ 新增：播放回答结束提示音 ++
+            setTimeout(() => playAudio('/static/audio/如果需要更详细的信息，可以继续追问哦。.wav'), 500); // 稍作延迟
 
 
         } catch (error) {
@@ -356,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (!aiMessageDiv) { // 如果连流式气泡都没创建就出错了（比如 fetch 失败）
                  // 确保添加错误消息
                  addMessage('ai', `出现错误：${error.message}`, { isError: true });
+                 playAudio('/static/audio/哎呀，好像出了一点小问题，请稍后再试或者换个问题问问看？.wav'); // ++ 新增：播放错误提示音 ++
             }
             // 如果 aiMessageDiv 已经是错误消息，则什么都不做
 
@@ -390,6 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
             userQuestionInput.value = promptText;
             userQuestionInput.focus();
             autoResizeTextarea();
+            // playAudio('/static/audio/这是一个常见的问题，让我为你解释一下。.wav'); // -- 移除：点击提示语时的语音 --
         });
     });
 
@@ -401,6 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 2. 重新添加初始问候语
             addMessage('ai', initialGreeting);
+            playAudio('/static/audio/好的，让我们重新开始对话吧！.wav'); // ++ 新增：播放清空聊天语音 ++
 
             // 3. （可选）通知后端清除上下文
             try {

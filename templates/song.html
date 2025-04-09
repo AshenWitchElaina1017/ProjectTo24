@@ -9,6 +9,21 @@
 {% block content %}
 <div class="song-game-container">
     <h1>二十四节气诗词配对</h1>
+    <div id="score-display" class="score-display">分数: <span id="score">0</span></div>
+    <div id="game-setup" class="game-setup">
+        <p>请选择题目数量:</p>
+        <label>
+            <input type="radio" name="question-count" value="4" checked> 4题
+        </label>
+        <label>
+            <input type="radio" name="question-count" value="8"> 8题
+        </label>
+        <label>
+            <input type="radio" name="question-count" value="12"> 12题
+        </label>
+        <button id="start-game-btn" class="start-btn">开始游戏</button>
+    </div>
+    <div id="game-area" style="display: none;"> <!-- 游戏区域开始 -->
     <div id="term-display" class="term-display">
         <!-- 节气题目将显示在这里 -->
         <p>请为节气 <strong id="current-term">...</strong> 选择对应的诗词：</p>
@@ -27,6 +42,7 @@
         </div>
     </div>
     <button id="next-question-btn" class="next-btn">下一题</button>
+    </div> <!-- 游戏区域结束 -->
 </div>
 {% endblock %}
 

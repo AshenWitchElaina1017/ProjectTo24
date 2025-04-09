@@ -15,13 +15,13 @@ OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 DEEPSEEK_API_KEY = os.environ.get('DEEPSEEK_API_KEY') # ++ 新增：读取 DeepSeek Key ++
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY') # ++ 新增：读取 Gemini Key ++
 # --- 定义 API 配置 ---
-OPENAI_API_URL = 'YOU_API_URL'
+OPENAI_API_URL = 'https://api.ephone.chat/v1/chat/completions'
 OPENAI_MODEL_NAME = 'gpt-4o-mini-search-preview'
 
-DEEPSEEK_API_URL = 'YOU_API_URL' # ++ 新增：DeepSeek API URL ++
+DEEPSEEK_API_URL = 'https://ark.cn-beijing.volces.com/api/v3/chat/completions' # ++ 新增：DeepSeek API URL ++
 DEEPSEEK_MODEL_NAME = 'deepseek-v3-250324' # ++ 新增：DeepSeek 模型 ++
 
-GEMINI_API_URL = 'YOU_API_URL' # ++ 新增：Gemini API URL ++
+GEMINI_API_URL = 'https://api.duck2api.com/v1/chat/completions' # ++ 新增：Gemini API URL ++
 GEMINI_MODEL_NAME = 'gemini-2.5-pro-exp-03-25-search' # ++ 新增：Gemini 模型 ++
 # --- 启动前检查 ---
 if not OPENAI_API_KEY:

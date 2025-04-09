@@ -10,20 +10,13 @@
 
 {% block content %}
 <div class="chat-container">
-    {# 背景音乐播放器 #}
-    <audio id="bg-music" loop autoplay>
-        <source src="{{ url_for('static', filename='audio/bg_music.mp3') }}" type="audio/mpeg">
-        您的浏览器不支持 audio 元素。
-    </audio>
+    {# 背景音乐现在由 template.html 处理 #}
     {# 聊天窗口顶部标题 #}
     <div class="chat-header">
         <h4>节气小助手 💬</h4>
         {# ++ 新增：包裹按钮的容器 ++ #}
         <div class="header-buttons">
-             <button id="music-toggle-btn" class="qa-button music-toggle-btn"> {# ++ 移动到此处，并调整类名 ++ #}
-                <span class="play-icon">▶️</span>
-                <span class="pause-icon" style="display: none;">⏸️</span>
-             </button>
+             {# 音乐按钮已移至 music_controls block #}
              <button id="clear-chat-button" class="qa-button clear-button" title="清空消息记录">🗑️ 清空</button>
         </div>
     </div>
@@ -98,6 +91,14 @@
             </ul>
         </div>
     </div>
+{% endblock %}
+
+{% block music_controls %}
+    {# Only show button if it's a music page #}
+    {% if request.endpoint in ['index', 'qa', 'about'] %}
+        {# Button outside li, with specific class for fixed positioning #}
+        <button id="music-toggle-button" class="fixed-music-button">🎵 加载中...</button>
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}

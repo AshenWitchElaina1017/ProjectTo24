@@ -16,15 +16,7 @@
     </div>
 </div>
 
-{# 背景音乐播放器 #}
-<audio id="bg-music" loop autoplay>
-    <source src="{{ url_for('static', filename='audio/bg_music.mp3') }}" type="audio/mpeg">
-    您的浏览器不支持 audio 元素。
-</audio>
-<button id="music-toggle-btn" class="music-btn">
-    <span class="play-icon">▶️</span>
-    <span class="pause-icon" style="display: none;">⏸️</span>
-</button>
+{# 背景音乐播放器和按钮现在由 template.html 和 music_controls block 处理 #}
 {# 2. 下部分：季节与节气介绍 #}
 <div class="seasons-container">
     <h2>探索四季之韵</h2>
@@ -42,6 +34,15 @@
     </div>
 </div>
 {% endblock %}
+
+{% block music_controls %}
+    {# Only show button if it's a music page #}
+    {% if request.endpoint in ['index', 'qa', 'about'] %}
+        {# Button outside li, with specific class for fixed positioning #}
+        <button id="music-toggle-button" class="fixed-music-button">🎵 加载中...</button>
+    {% endif %}
+{% endblock %}
+
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}

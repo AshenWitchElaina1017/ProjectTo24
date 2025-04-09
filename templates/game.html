@@ -15,14 +15,15 @@
         <div class="difficulty-selector">
              <label for="difficulty">难度: </label>
              <select id="difficulty" name="difficulty">
-                 <option value="6">简单 (6 对)</option>
-                 <option value="8" selected>普通 (8 对)</option>
+                 <option value="4">简单 (4 对)</option>
+                 <option value="8" selected>中等 (8 对)</option>  {# 将 8 对设为默认选中 #}
                  <option value="12">困难 (12 对)</option>
              </select>
          </div>
         <div class="game-info">
             <span>步数: <span id="moves-count">0</span></span>
             <span>时间: <span id="timer">00:00</span></span>
+            <span>积分: <span id="score">0</span></span> {# 增加积分显示 #}
         </div>
         <button id="restart-button" class="game-button">重新开始</button>
     </div>
@@ -42,6 +43,7 @@
         <p>难度: <span id="final-difficulty">普通</span></p> {# 显示最终难度 #}
         <p>总步数: <span id="final-moves">0</span></p>
         <p>总用时: <span id="final-time">00:00</span></p>
+        <p>最终得分: <span id="final-score">0</span></p> {# 增加最终得分显示 #}
         <button id="play-again-button" class="game-button">再玩一次</button>
     </div>
 </div>

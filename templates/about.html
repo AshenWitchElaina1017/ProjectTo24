@@ -47,6 +47,14 @@
 </main>
 {% endblock %}
 
+{% block music_controls %}
+    {# Only show button if it's a music page #}
+    {% if request.endpoint in ['index', 'qa', 'about'] %}
+        {# Button outside li, with specific class for fixed positioning #}
+        <button id="music-toggle-button" class="fixed-music-button">🎵 加载中...</button>
+    {% endif %}
+{% endblock %}
+
 {# 如果 about 页面需要特定的 JS，可以在这里添加 #}
 {# {% block scripts %}
     {{ super() }}

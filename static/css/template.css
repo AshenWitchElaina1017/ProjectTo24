@@ -88,6 +88,7 @@ body {
     flex-shrink: 0; /* 防止链接被压缩 */
 }
 
+/* Styles for regular nav links */
 .navbar .nav-links li a {
     text-decoration: none;
     color: #ffffff; /* 白色链接文字 */
@@ -97,10 +98,12 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* 添加颜色过渡 */
     background-color: rgba(255, 255, 255, 0.4); /* 增加背景透明度，使其更明显 */
     font-weight: 500; /* 可以稍微调整字重 */
+    display: inline-block; /* Ensure proper layout */
 }
 
+/* Hover/active styles for regular nav links */
 .navbar .nav-links li a:hover,
-.navbar .nav-links li a.active { /* 添加 active 类用于当前页面高亮 */
+.navbar .nav-links li a.active {
     background-color: #ffffff; /* 悬停/激活时变为白色背景 */
     color: #66a6ff; /* 文字颜色变为主题蓝色 */
     transform: translateY(-4px) scale(1.05); /* 增加上移和放大效果 */
@@ -173,6 +176,7 @@ body {
     text-align: center;
 }
 
+/* Mobile styles for nav links */
 .navbar .nav-links li a {
     display: block; /* Make link take full width */
     padding: 12px 20px;
@@ -181,8 +185,10 @@ body {
     background-color: rgba(255, 255, 255, 0.2); /* Slightly different background */
     width: auto; /* Let text determine width within margins */
     color: #ffffff;
+    text-align: center;
 }
 
+/* Mobile hover/active styles for nav links */
 .navbar .nav-links li a:hover,
 .navbar .nav-links li a.active {
     background-color: #ffffff;
@@ -233,6 +239,30 @@ body {
     font-size: 0.95em;
     z-index: 1000; /* Ensure it's above other content */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Fixed Music Button Styles (similar to AI Assistant) */
+.fixed-music-button {
+    position: fixed;
+    bottom: 30px;
+    left: 30px; /* Position on the left */
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); /* Example: Pink/Peach gradient */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px; /* Pill shape */
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 154, 158, 0.5); /* Shadow matching gradient */
+    font-weight: 700;
+    font-size: 0.95em;
+    z-index: 1000; /* Ensure it's above other content */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none; /* Ensure no default border */
+    font-family: inherit; /* Match body font */
+}
+
+.fixed-music-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(255, 154, 158, 0.7); /* Enhanced shadow */
 }
 
 #ai-assistant-button:hover {
@@ -353,6 +383,13 @@ body {
     padding: 10px 15px;
 }
 
+/* Adjust fixed music button for mobile */
+.fixed-music-button {
+    left: 15px;
+    bottom: 20px;
+    padding: 10px 15px;
+}
+
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
@@ -437,6 +474,13 @@ body {
         bottom: 25px;
          padding: 12px 20px;
     }
+
+    /* Adjust fixed music button for medium devices */
+    .fixed-music-button {
+        left: 20px;
+        bottom: 25px;
+        padding: 12px 20px;
+    }
 }
 
 /* Large devices (desktops, 992px and up) */
@@ -462,6 +506,12 @@ body {
 
      #ai-assistant-button {
         right: 30px;
+        bottom: 30px;
+    }
+
+    /* Adjust fixed music button for large devices */
+    .fixed-music-button {
+        left: 30px;
         bottom: 30px;
     }
 }
